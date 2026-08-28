@@ -1,13 +1,14 @@
-```html
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Noticia - 12 + 12 Noticias de Tigre</title>
+<title>12 + 12 Noticias de Tigre</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
@@ -19,31 +20,34 @@ body {
     color: #222;
 }
 
+/* ENCABEZADO */
+
 header {
     background: #111;
     color: white;
     text-align: center;
-    padding: 22px 15px;
+    padding: 20px 15px;
 }
 
 .logo img {
-    width: 100px;
-    height: 100px;
+    width: 90px;
+    height: 90px;
     object-fit: cover;
     border-radius: 50%;
 }
 
 .logo-text {
-    font-size: 38px;
+    font-size: 36px;
     font-weight: 900;
-    margin-top: 8px;
+    margin-top: 5px;
 }
 
 .subtitulo {
     color: #ddd;
-    font-size: 18px;
-    margin-top: 5px;
+    font-size: 17px;
 }
+
+/* BARRA */
 
 nav {
     background: #e30613;
@@ -56,12 +60,14 @@ nav a {
     color: white;
     text-decoration: none;
     font-weight: bold;
-    padding: 15px 18px;
+    padding: 14px 18px;
 }
 
 nav a:hover {
     background: #b9000c;
 }
+
+/* CONTENIDO */
 
 .contenedor {
     max-width: 900px;
@@ -69,11 +75,13 @@ nav a:hover {
     padding: 0 15px;
 }
 
+/* NOTICIA */
+
 .noticia-completa {
     background: white;
-    padding: 25px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
 }
 
 .categoria {
@@ -82,18 +90,24 @@ nav a:hover {
     color: white;
     padding: 7px 12px;
     border-radius: 4px;
+    font-size: 14px;
     font-weight: bold;
     margin-bottom: 15px;
 }
 
+.contenido {
+    padding: 30px;
+}
+
 h1 {
-    font-size: 40px;
-    line-height: 1.2;
+    font-size: 42px;
+    line-height: 1.15;
     margin: 0 0 15px;
 }
 
 .fecha {
     color: #777;
+    font-size: 14px;
     margin-bottom: 20px;
 }
 
@@ -101,27 +115,25 @@ h1 {
     width: 100%;
     max-height: 500px;
     object-fit: cover;
-    border-radius: 6px;
-    margin-bottom: 25px;
+    display: block;
 }
 
-.contenido {
-    font-size: 20px;
+.texto-noticia p {
+    font-size: 19px;
     line-height: 1.7;
+    margin-bottom: 20px;
+    text-align: justify;
 }
 
-.contenido p {
-    margin-bottom: 20px;
-    text-align: left;
-}
+/* BOTÓN VOLVER */
 
 .volver {
     display: inline-block;
     margin-top: 25px;
     background: #111;
     color: white;
-    padding: 12px 20px;
     text-decoration: none;
+    padding: 12px 20px;
     border-radius: 5px;
     font-weight: bold;
 }
@@ -130,11 +142,47 @@ h1 {
     background: #333;
 }
 
-.error {
-    text-align: center;
-    padding: 40px;
-    font-size: 20px;
+/* COMPARTIR */
+
+.compartir {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
 }
+
+.compartir strong {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.compartir a {
+    display: inline-block;
+    padding: 10px 15px;
+    margin-right: 5px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.whatsapp {
+    background: #25D366;
+}
+
+.facebook {
+    background: #1877F2;
+}
+
+/* ERROR */
+
+.error {
+    background: white;
+    padding: 40px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+/* FOOTER */
 
 footer {
     margin-top: 40px;
@@ -144,82 +192,104 @@ footer {
     padding: 25px 15px;
 }
 
+/* CELULAR */
+
 @media (max-width: 700px) {
 
     h1 {
-        font-size: 28px;
+        font-size: 30px;
     }
 
     .contenido {
-        font-size: 18px;
+        padding: 20px;
     }
 
-    .noticia-completa {
-        padding: 18px;
+    .texto-noticia p {
+        font-size: 17px;
     }
 
     nav a {
         padding: 11px 9px;
         font-size: 13px;
     }
+
 }
+
 </style>
+
 </head>
 
 <body>
 
 <header>
 
-    <div class="logo">
-        <img src="./logo.jpg" alt="12 + 12 Noticias de Tigre">
-    </div>
+```
+<div class="logo">
+
+    <img src="./logo.jpg"
+         alt="12 + 12 Noticias de Tigre">
 
     <div class="logo-text">
         12 + 12
     </div>
 
-    <div class="subtitulo">
-        Noticias de Tigre
-    </div>
+</div>
+
+<div class="subtitulo">
+    Noticias de Tigre
+</div>
+```
 
 </header>
 
 <nav>
-    <a href="index.html">INICIO</a>
-    <a href="#">TIGRE</a>
-    <a href="#">POLICIALES</a>
-    <a href="#">INFORMACIÓN VECINAL</a>
-    <a href="#">POLÍTICA</a>
-    <a href="#">DEPORTES</a>
-    <a href="#">GENERAL</a>
+
+```
+<a href="index.html">INICIO</a>
+<a href="index.html">TIGRE</a>
+<a href="index.html">POLICIALES</a>
+<a href="index.html">INFORMACIÓN VECINAL</a>
+<a href="index.html">POLÍTICA</a>
+<a href="index.html">DEPORTES</a>
+<a href="index.html">GENERAL</a>
+```
+
 </nav>
 
 <div class="contenedor">
 
-    <div class="noticia-completa" id="noticia">
+```
+<article class="noticia-completa">
+
+    <div id="contenidoNoticia">
 
         <div class="error">
-            Cargando noticia...
+            <h2>Cargando noticia...</h2>
+            <p>Esperá unos segundos.</p>
         </div>
 
     </div>
+
+</article>
+```
 
 </div>
 
 <footer>
 
-    <strong>12 + 12 Noticias de Tigre</strong>
+```
+<strong>12 + 12 Noticias de Tigre</strong>
 
-    <br><br>
+<br><br>
 
-    Información local y actualidad
+Información local y actualidad
 
-    <br><br>
+<br><br>
 
-    © 2026 - Todos los derechos reservados
+© 2026 - Todos los derechos reservados
+```
 
 </footer>
-
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -231,6 +301,7 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK";
 
+
 const supabaseClient =
 supabase.createClient(
     SUPABASE_URL,
@@ -238,25 +309,35 @@ supabase.createClient(
 );
 
 
+// OBTENER ID DE LA NOTICIA
+
+const parametros =
+new URLSearchParams(window.location.search);
+
+const id =
+parametros.get("id");
+
+
+// CARGAR NOTICIA
+
 async function cargarNoticia() {
 
-    const parametros =
-        new URLSearchParams(window.location.search);
-
-    const id =
-        parametros.get("id");
-
     const contenedor =
-        document.getElementById("noticia");
+    document.getElementById("contenidoNoticia");
+
 
     if (!id) {
 
         contenedor.innerHTML = `
             <div class="error">
-                No se encontró la noticia.
-                <br><br>
+                <h2>Noticia no encontrada</h2>
+
+                <p>
+                    No se indicó qué noticia querés ver.
+                </p>
+
                 <a class="volver" href="index.html">
-                    ← Volver a noticias
+                    ← Volver a las noticias
                 </a>
             </div>
         `;
@@ -266,22 +347,31 @@ async function cargarNoticia() {
 
 
     const { data, error } =
-        await supabaseClient
-        .from("noticias")
-        .select("*")
-        .eq("id", id)
-        .single();
+    await supabaseClient
+    .from("noticias")
+    .select("*")
+    .eq("id", id)
+    .single();
 
 
     if (error || !data) {
 
+        console.error(error);
+
         contenedor.innerHTML = `
             <div class="error">
-                No se pudo encontrar la noticia.
-                <br><br>
+
+                <h2>Noticia no encontrada</h2>
+
+                <p>
+                    La noticia que buscás no existe
+                    o fue eliminada.
+                </p>
+
                 <a class="volver" href="index.html">
-                    ← Volver a noticias
+                    ← Volver a las noticias
                 </a>
+
             </div>
         `;
 
@@ -289,30 +379,99 @@ async function cargarNoticia() {
     }
 
 
-    const contenido =
+    // FECHA
+
+    let fechaTexto = "";
+
+    if (data.fecha) {
+
+        const fecha =
+        new Date(data.fecha);
+
+        fechaTexto =
+        fecha.toLocaleDateString(
+            "es-AR",
+            {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            }
+        );
+
+    }
+
+
+    // CONTENIDO
+
+    let contenidoHTML = "";
+
+    if (data.contenido) {
+
+        contenidoHTML =
         data.contenido
-        ? data.contenido
-            .split(/\n\s*\n/)
-            .map(parrafo =>
-                `<p>${parrafo.trim()}</p>`
-            )
-            .join("")
-        : "";
+        .split(/\n\s*\n/)
+        .map(parrafo => {
+
+            return `
+                <p>
+                    ${parrafo.trim()}
+                </p>
+            `;
+
+        })
+        .join("");
+
+    }
+
+
+    // URL ACTUAL
+
+    const urlActual =
+    window.location.href;
+
+
+    // WHATSAPP
+
+    const whatsapp =
+    "https://wa.me/?text=" +
+    encodeURIComponent(
+        data.titulo + " - " + urlActual
+    );
+
+
+    // FACEBOOK
+
+    const facebook =
+    "https://www.facebook.com/sharer/sharer.php?u=" +
+    encodeURIComponent(urlActual);
 
 
     contenedor.innerHTML = `
 
-        <div class="categoria">
-            ${data.categoria || "GENERAL"}
+        <div class="contenido">
+
+            <span class="categoria">
+                ${data.categoria || "GENERAL"}
+            </span>
+
+
+            <h1>
+                ${data.titulo}
+            </h1>
+
+
+            ${
+                fechaTexto
+                ?
+                `<div class="fecha">
+                    📅 Publicado el ${fechaTexto}
+                </div>`
+                :
+                ""
+            }
+
         </div>
 
-        <h1>
-            ${data.titulo}
-        </h1>
-
-        <div class="fecha">
-            12 + 12 Noticias de Tigre
-        </div>
 
         ${
             data.imagen
@@ -320,25 +479,56 @@ async function cargarNoticia() {
             `<img
                 class="imagen-principal"
                 src="${data.imagen}"
-                alt="${data.titulo}">
-            `
+                alt="${data.titulo}"
+            >`
             :
             ""
         }
 
+
         <div class="contenido">
-            ${contenido}
+
+            <div class="texto-noticia">
+
+                ${contenidoHTML}
+
+            </div>
+
+
+            <div class="compartir">
+
+                <strong>
+                    Compartir esta noticia
+                </strong>
+
+                <a
+                    class="whatsapp"
+                    href="${whatsapp}"
+                    target="_blank">
+                    WhatsApp
+                </a>
+
+                <a
+                    class="facebook"
+                    href="${facebook}"
+                    target="_blank">
+                    Facebook
+                </a>
+
+            </div>
+
+
+            <a
+                class="volver"
+                href="index.html">
+
+                ← Volver a las noticias
+
+            </a>
+
         </div>
 
-        <a class="volver" href="index.html">
-            ← Volver a noticias
-        </a>
-
     `;
-
-    document.title =
-        data.titulo +
-        " - 12 + 12 Noticias de Tigre";
 
 }
 
@@ -349,4 +539,3 @@ cargarNoticia();
 
 </body>
 </html>
-```
