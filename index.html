@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -26,108 +27,128 @@ body {
 header {
     background: #111;
     color: white;
-    padding: 18px 30px;
+    padding: 18px 20px;
 }
 
 .encabezado {
-    max-width: 1250px;
+    max-width: 1150px;
     margin: auto;
     display: flex;
     align-items: center;
-    gap: 22px;
+    justify-content: space-between;
 }
 
-.logo img {
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.logo-area img {
     width: 125px;
     height: 125px;
     object-fit: cover;
     border-radius: 50%;
-    display: block;
 }
 
-.titulo-medio {
-    font-size: 42px;
+.logo-texto {
+    font-size: 38px;
     font-weight: 900;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
 }
 
-.subtitulo {
-    font-size: 19px;
-    color: #ccc;
-    margin-top: 5px;
+.logo-subtitulo {
+    font-size: 18px;
+    color: #ddd;
+    margin-top: 4px;
 }
 
-/* =========================
-   ESTRUCTURA
-========================= */
+/* BOTÓN MENÚ */
 
-.layout {
-    max-width: 1250px;
-    margin: 25px auto;
-    padding: 0 15px;
-
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 25px;
-}
-
-/* =========================
-   MENU LATERAL
-========================= */
-
-.sidebar {
-    background: #111;
-    border-radius: 8px;
-    overflow: hidden;
-    height: fit-content;
-}
-
-.sidebar-titulo {
+.menu-btn {
     background: #e30613;
     color: white;
-    padding: 15px;
-    font-weight: bold;
-    font-size: 18px;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 22px;
+    cursor: pointer;
 }
 
-.sidebar a {
+/* =========================
+   BARRA ROJA
+========================= */
+
+.barra {
+    height: 8px;
+    background: #e30613;
+}
+
+/* =========================
+   MENÚ LATERAL
+========================= */
+
+.menu-lateral {
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 320px;
+    height: 100%;
+    background: #111;
+    color: white;
+    z-index: 1000;
+    padding: 25px;
+    transition: right 0.3s ease;
+    box-shadow: -3px 0 10px rgba(0,0,0,0.3);
+}
+
+.menu-lateral.abierto {
+    right: 0;
+}
+
+.menu-lateral h2 {
+    margin-top: 0;
+    border-bottom: 1px solid #444;
+    padding-bottom: 15px;
+}
+
+.menu-lateral a {
     display: block;
     color: white;
     text-decoration: none;
-    padding: 14px 15px;
+    padding: 15px 5px;
     border-bottom: 1px solid #333;
     font-weight: bold;
 }
 
-.sidebar a:hover {
+.menu-lateral a:hover {
     background: #e30613;
+    padding-left: 12px;
 }
 
-.redes-lateral {
-    margin-top: 20px;
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
-}
-
-.redes-lateral h3 {
-    margin-top: 0;
-}
-
-.redes-lateral a {
-    display: block;
+.cerrar-menu {
     background: #e30613;
+    border: none;
     color: white;
-    text-decoration: none;
-    padding: 10px;
-    margin-top: 8px;
-    text-align: center;
+    padding: 8px 12px;
     border-radius: 5px;
-    font-weight: bold;
+    float: right;
+    cursor: pointer;
+    font-size: 18px;
 }
 
 /* =========================
-   CONTENIDO
+   CONTENEDOR
+========================= */
+
+.contenedor {
+    max-width: 1150px;
+    margin: auto;
+    padding: 20px 15px;
+}
+
+/* =========================
+   ÚLTIMAS NOTICIAS
 ========================= */
 
 .ultima {
@@ -140,7 +161,7 @@ header {
 }
 
 /* =========================
-   NOTICIA DESTACADA
+   DESTACADA
 ========================= */
 
 .principal {
@@ -149,22 +170,15 @@ header {
     overflow: hidden;
     margin-bottom: 30px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-
     cursor: pointer;
 }
 
-.principal:hover {
-    box-shadow: 0 4px 14px rgba(0,0,0,0.20);
-}
-
 .principal .imagen {
-    height: 360px;
+    height: 390px;
     background: linear-gradient(135deg, #222, #555);
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     color: white;
     font-size: 24px;
     font-weight: bold;
@@ -182,7 +196,7 @@ header {
 
 .principal h1 {
     font-size: 32px;
-    margin: 0 0 12px;
+    margin: 0 0 10px;
 }
 
 .principal p {
@@ -191,7 +205,7 @@ header {
 }
 
 /* =========================
-   TITULOS
+   TÍTULOS
 ========================= */
 
 .seccion-titulo {
@@ -215,30 +229,25 @@ header {
     background: white;
     border-radius: 8px;
     overflow: hidden;
-
-    box-shadow: 0 2px 7px rgba(0,0,0,0.10);
-
+    box-shadow: 0 2px 7px rgba(0,0,0,0.1);
     cursor: pointer;
-
-    transition: transform 0.15s, box-shadow 0.15s;
+    transition: transform 0.2s;
 }
 
 .noticia:hover {
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.18);
 }
 
-.noticia img {
+.noticia img,
+.noticia .foto {
     width: 100%;
-    height: 170px;
+    height: 180px;
     object-fit: cover;
 }
 
 .noticia .foto {
-    height: 170px;
     background: #555;
     color: white;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -249,27 +258,70 @@ header {
 }
 
 .noticia h3 {
-    margin: 0 0 10px;
+    margin-top: 0;
     font-size: 20px;
 }
 
 .noticia p {
-    line-height: 1.5;
+    line-height: 1.6;
     margin: 0 0 15px;
+    text-align: justify;
 }
 
 .boton {
     display: inline-block;
     background: #e30613;
     color: white;
-    padding: 7px 12px;
-    border-radius: 4px;
-    font-size: 13px;
+    padding: 8px 13px;
+    border-radius: 5px;
     font-weight: bold;
 }
 
 /* =========================
-   PIE
+   SECCIONES
+========================= */
+
+.categorias {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.categoria {
+    background: #111;
+    color: white;
+    padding: 18px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 6px;
+}
+
+/* =========================
+   REDES
+========================= */
+
+.redes {
+    text-align: center;
+    background: white;
+    padding: 25px;
+    margin-top: 30px;
+    border-radius: 8px;
+}
+
+.redes a {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px 16px;
+    background: #e30613;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* =========================
+   FOOTER
 ========================= */
 
 footer {
@@ -284,107 +336,73 @@ footer {
    CELULAR
 ========================= */
 
-@media (max-width: 900px) {
-
-    .layout {
-        grid-template-columns: 1fr;
-    }
-
-    .sidebar {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .sidebar-titulo {
-        width: 100%;
-    }
-
-    .sidebar a {
-        flex: 1 1 33%;
-        text-align: center;
-        font-size: 14px;
-        border-right: 1px solid #333;
-    }
-
-    .redes-lateral {
-        display: none;
-    }
-
-    .noticias {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-}
-
-@media (max-width: 600px) {
+@media (max-width: 800px) {
 
     header {
         padding: 15px;
     }
 
-    .encabezado {
-        gap: 15px;
+    .logo-area {
+        gap: 12px;
     }
 
-    .logo img {
+    .logo-area img {
         width: 85px;
         height: 85px;
     }
 
-    .titulo-medio {
+    .logo-texto {
         font-size: 27px;
     }
 
-    .subtitulo {
+    .logo-subtitulo {
         font-size: 15px;
     }
 
-    .sidebar a {
-        flex: 1 1 50%;
-    }
-
     .principal .imagen {
-        height: 220px;
+        height: 230px;
     }
 
     .principal h1 {
-        font-size: 24px;
+        font-size: 25px;
     }
 
     .noticias {
         grid-template-columns: 1fr;
     }
 
+    .categorias {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .menu-lateral {
+        width: 280px;
+    }
 }
 
 </style>
+
 </head>
 
 <body>
-
-
-<!-- =========================
-     ENCABEZADO
-========================= -->
 
 <header>
 
 <div class="encabezado">
 
-    <div class="logo">
+```
+<div class="logo-area">
 
-        <img src="./logo.jpg"
-             alt="12 + 12 Noticias de Tigre">
-
-    </div>
+    <img src="./logo.jpg"
+         alt="12 + 12 Noticias de Tigre">
 
     <div>
 
-        <div class="titulo-medio">
+        <div class="logo-texto">
             12 + 12
         </div>
 
-        <div class="subtitulo">
+        <div class="logo-subtitulo">
             Noticias de Tigre
         </div>
 
@@ -392,144 +410,105 @@ footer {
 
 </div>
 
+<button class="menu-btn" onclick="abrirMenu()">
+    ☰
+</button>
+```
+
+</div>
+
 </header>
 
+<div class="barra"></div>
 
-<!-- =========================
-     ESTRUCTURA
-========================= -->
+<!-- MENÚ LATERAL -->
 
-<div class="layout">
+<div class="menu-lateral" id="menuLateral">
 
+<button class="cerrar-menu" onclick="cerrarMenu()">
+    ✕
+</button>
 
-<!-- =========================
-     MENU LATERAL
-========================= -->
+<h2>Secciones</h2>
 
-<aside>
-
-<div class="sidebar">
-
-    <div class="sidebar-titulo">
-        SECCIONES
-    </div>
-
-    <a href="#">
-        🏠 INICIO
-    </a>
-
-    <a href="#">
-        TIGRE
-    </a>
-
-    <a href="#">
-        POLICIALES
-    </a>
-
-    <a href="#">
-        INFORMACIÓN VECINAL
-    </a>
-
-    <a href="#">
-        POLÍTICA
-    </a>
-
-    <a href="#">
-        DEPORTES
-    </a>
-
-    <a href="#">
-        OBRAS Y SERVICIOS
-    </a>
-
-    <a href="#">
-        SOCIEDAD
-    </a>
-
-    <a href="#">
-        GENERAL
-    </a>
+<a href="#">INICIO</a> <a href="#">TIGRE</a> <a href="#">POLICIALES</a> <a href="#">INFORMACIÓN VECINAL</a> <a href="#">POLÍTICA</a> <a href="#">DEPORTES</a> <a href="#">OBRAS Y SERVICIOS</a> <a href="#">SOCIEDAD</a> <a href="#">GENERAL</a>
 
 </div>
 
-
-<div class="redes-lateral">
-
-    <h3>Seguinos</h3>
-
-    <a href="#">
-        Facebook
-    </a>
-
-    <a href="#">
-        Instagram
-    </a>
-
-    <a href="#">
-        TikTok
-    </a>
-
-</div>
-
-</aside>
-
-
-<!-- =========================
-     CONTENIDO PRINCIPAL
-========================= -->
-
-<main>
+<div class="contenedor">
 
 <div class="ultima">
     ÚLTIMAS NOTICIAS
 </div>
 
-
 <!-- NOTICIA DESTACADA -->
 
 <div class="principal" id="noticiaDestacada">
 
-    <div class="imagen">
-        Cargando noticia destacada...
-    </div>
-
-    <div class="contenido">
-
-        <h1>
-            Cargando...
-        </h1>
-
-        <p>
-            Esperando la noticia destacada.
-        </p>
-
-    </div>
-
+```
+<div class="imagen">
+    Cargando noticia destacada...
 </div>
 
+<div class="contenido">
+
+    <h1>Cargando...</h1>
+
+    <p>
+        Esperando la noticia destacada.
+    </p>
+
+</div>
+```
+
+</div>
 
 <h2 class="seccion-titulo">
     Últimas noticias
 </h2>
 
-
 <div class="noticias" id="contenedorNoticias"></div>
 
+<h2 class="seccion-titulo">
+    Secciones
+</h2>
 
-</main>
+<div class="categorias">
+
+<div class="categoria">TIGRE</div>
+<div class="categoria">POLICIALES</div>
+<div class="categoria">INFORMACIÓN VECINAL</div>
+<div class="categoria">POLÍTICA</div>
+<div class="categoria">DEPORTES</div>
+<div class="categoria">OBRAS Y SERVICIOS</div>
+<div class="categoria">SOCIEDAD</div>
+<div class="categoria">GENERAL</div>
 
 </div>
 
+<div class="redes">
 
-<!-- =========================
-     FOOTER
-========================= -->
+<h2>Seguinos en nuestras redes</h2>
+
+<a href="#">
+Facebook
+</a>
+
+<a href="#">
+Instagram
+</a>
+
+<a href="#">
+TikTok
+</a>
+
+</div>
+
+</div>
 
 <footer>
 
-<strong>
-12 + 12 Noticias de Tigre
-</strong>
+<strong>12 + 12 Noticias de Tigre</strong>
 
 <br><br>
 
@@ -541,31 +520,46 @@ Información local y actualidad
 
 </footer>
 
-
-<!-- =========================
-     SUPABASE
-========================= -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 
 <script>
 
 const SUPABASE_URL =
-    "https://piyabciajfhlarvecdvu.supabase.co";
+"https://piyabciajfhlarvecdvu.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK";
+"sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK";
 
 const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 
 /* =========================
-   CARGAR NOTICIAS
+   MENÚ
+========================= */
+
+function abrirMenu() {
+
+    document
+    .getElementById("menuLateral")
+    .classList.add("abierto");
+
+}
+
+function cerrarMenu() {
+
+    document
+    .getElementById("menuLateral")
+    .classList.remove("abierto");
+
+}
+
+
+/* =========================
+   NOTICIAS
 ========================= */
 
 async function cargarNoticias() {
@@ -574,10 +568,7 @@ async function cargarNoticias() {
         await supabaseClient
         .from("noticias")
         .select("*")
-        .order("fecha", {
-            ascending: false
-        });
-
+        .order("fecha", { ascending: false });
 
     if (error) {
 
@@ -589,12 +580,10 @@ async function cargarNoticias() {
         return;
     }
 
-
     const contenedor =
         document.getElementById(
             "contenedorNoticias"
         );
-
 
     contenedor.innerHTML = "";
 
@@ -603,7 +592,6 @@ async function cargarNoticias() {
 
         const articulo =
             document.createElement("div");
-
 
         articulo.className =
             "noticia";
@@ -625,22 +613,17 @@ async function cargarNoticias() {
 
                 ?
 
-                \`
-                <img
+                `<img
                     src="${noticia.imagen}"
-                    alt="${noticia.titulo}"
-                >
-                \`
+                    alt="${noticia.titulo}">
+                `
 
                 :
 
-                \`
-                <div class="foto">
+                `<div class="foto">
                     NOTICIA
-                </div>
-                \`
+                </div>`
             }
-
 
             <div class="texto">
 
@@ -648,36 +631,27 @@ async function cargarNoticias() {
                     ${noticia.titulo}
                 </h3>
 
-
-                <div>
+                <div class="contenido-noticia">
 
                     ${
                         noticia.contenido
-
                         ?
-
                         noticia.contenido
-                        .split(/\\n\\s*\\n/)
-                        .slice(0, 2)
-                        .map(parrafo =>
-                            \`<p>
-                                ${parrafo.trim()}
-                            </p>\`
-                        )
-                        .join("")
-
+                            .split(/\n\s*\n/)
+                            .slice(0,1)
+                            .map(
+                                parrafo =>
+                                `<p>${parrafo.trim()}</p>`
+                            )
+                            .join("")
                         :
-
                         ""
                     }
 
                 </div>
 
-
                 <span class="boton">
-
                     ${noticia.categoria || "GENERAL"}
-
                 </span>
 
             </div>
@@ -743,8 +717,8 @@ async function cargarNoticiaDestacada() {
                 </h1>
 
                 <p>
-                    Próximamente vas a encontrar aquí
-                    nuestra noticia destacada.
+                    Próximamente vas a encontrar
+                    aquí nuestra noticia destacada.
                 </p>
 
             </div>
@@ -755,8 +729,7 @@ async function cargarNoticiaDestacada() {
     }
 
 
-    const noticia =
-        data[0];
+    const noticia = data[0];
 
 
     contenedor.onclick = function() {
@@ -777,12 +750,10 @@ async function cargarNoticiaDestacada() {
 
                 ?
 
-                \`
-                <img
+                `<img
                     src="${noticia.imagen}"
-                    alt="${noticia.titulo}"
-                >
-                \`
+                    alt="${noticia.titulo}">
+                `
 
                 :
 
@@ -798,26 +769,20 @@ async function cargarNoticiaDestacada() {
                 ${noticia.titulo}
             </h1>
 
-
-            <div>
+            <div class="contenido-noticia">
 
                 ${
                     noticia.contenido
-
                     ?
-
                     noticia.contenido
-                    .split(/\\n\\s*\\n/)
-                    .slice(0, 3)
-                    .map(parrafo =>
-                        \`<p>
-                            ${parrafo.trim()}
-                        </p>\`
-                    )
-                    .join("")
-
+                        .split(/\n\s*\n/)
+                        .slice(0,2)
+                        .map(
+                            parrafo =>
+                            `<p>${parrafo.trim()}</p>`
+                        )
+                        .join("")
                     :
-
                     ""
                 }
 
@@ -825,9 +790,7 @@ async function cargarNoticiaDestacada() {
 
 
             <span class="boton">
-
                 ${noticia.categoria || "GENERAL"}
-
             </span>
 
         </div>
@@ -837,16 +800,11 @@ async function cargarNoticiaDestacada() {
 }
 
 
-/* =========================
-   INICIAR
-========================= */
-
 cargarNoticias();
 
 cargarNoticiaDestacada();
 
 </script>
-
 
 </body>
 </html>
