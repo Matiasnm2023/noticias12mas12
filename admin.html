@@ -1,322 +1,808 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Administración - 12 + 12 Noticias</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
 
 body {
+
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
     background: #f1f3f5;
+
     color: #222;
 }
 
+
+/* =========================
+   ENCABEZADO
+========================= */
+
 header {
+
     background: #111;
+
     color: white;
+
     text-align: center;
+
     padding: 25px 15px;
 }
 
 header h1 {
+
     margin: 0;
+
     font-size: 30px;
 }
 
 header p {
+
     color: #ccc;
+
+    margin-bottom: 0;
 }
 
+
+/* =========================
+   CONTENEDOR
+========================= */
+
 .contenedor {
-    max-width: 900px;
+
+    max-width: 1000px;
+
     margin: 30px auto;
+
     padding: 0 15px;
 }
 
+
 .panel {
+
     background: white;
+
     padding: 25px;
+
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,0.12);
+
 }
 
+
+/* =========================
+   LOGIN
+========================= */
+
+#login {
+
+    max-width: 500px;
+
+    margin: 40px auto;
+}
+
+
+#panelAdmin {
+
+    display: none;
+}
+
+
+/* =========================
+   FORMULARIOS
+========================= */
+
 h2 {
+
     margin-top: 0;
 }
 
+
 label {
+
     display: block;
+
     font-weight: bold;
+
     margin-top: 18px;
+
     margin-bottom: 6px;
 }
+
 
 input,
 textarea,
 select {
+
     width: 100%;
+
     padding: 12px;
-    border: 1px solid #ccc;
+
+    border:
+        1px solid #ccc;
+
     border-radius: 5px;
+
     font-size: 16px;
 }
 
+
 textarea {
+
     min-height: 180px;
+
     resize: vertical;
 }
 
+
+/* =========================
+   BOTONES
+========================= */
+
 button {
+
     border: 0;
+
     background: #e30613;
+
     color: white;
-    padding: 12px 20px;
-    margin-top: 20px;
+
+    padding: 11px 16px;
+
+    margin-top: 12px;
+
     border-radius: 5px;
+
     font-weight: bold;
+
     cursor: pointer;
 }
 
+
 button:hover {
+
     background: #b9000c;
 }
 
+
+.boton-gris {
+
+    background: #333;
+}
+
+
+.boton-gris:hover {
+
+    background: #111;
+}
+
+
+.boton-verde {
+
+    background: #16823b;
+}
+
+
+.boton-verde:hover {
+
+    background: #0d612b;
+}
+
+
+.boton-editar {
+
+    background: #555;
+}
+
+
 #mensaje,
 #mensajeLogin {
+
     margin-top: 15px;
+
     font-weight: bold;
 }
 
-#panelAdmin {
-    display: none;
+
+/* =========================
+   NOTICIAS
+========================= */
+
+#listaNoticias {
+
+    margin-top: 20px;
 }
 
-#login {
-    max-width: 500px;
-    margin: 40px auto;
+
+.noticia-admin {
+
+    border-top:
+        1px solid #ddd;
+
+    padding: 20px 0;
 }
 
-.noticia {
-    border-top: 1px solid #ddd;
-    padding: 18px 0;
+
+.noticia-admin:first-child {
+
+    border-top: 0;
 }
 
-.noticia h3 {
-    margin: 0 0 8px;
+
+.noticia-admin h3 {
+
+    margin:
+        0 0 8px;
+
+    font-size: 21px;
 }
 
-.salida {
-    background: #333;
-    margin-left: 10px;
+
+.noticia-admin img {
+
+    width: 180px;
+
+    height: 110px;
+
+    object-fit: cover;
+
+    border-radius: 6px;
+
+    margin:
+        10px 0;
+}
+
+
+.estado-destacada {
+
+    color: #e30613;
+
+    font-weight: bold;
+
+    margin: 8px 0;
+}
+
+
+.botones-noticia {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+
+.botones-noticia button {
+
+    margin-top: 5px;
+}
+
+
+/* =========================
+   MODO EDICIÓN
+========================= */
+
+.modo-edicion {
+
+    background: #fff5f5;
+
+    border:
+        2px solid #e30613;
+}
+
+
+.aviso-edicion {
+
+    background: #e30613;
+
+    color: white;
+
+    padding: 12px;
+
+    border-radius: 5px;
+
+    margin-bottom: 15px;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   CELULAR
+========================= */
+
+@media (max-width: 600px) {
+
+    .panel {
+
+        padding: 18px;
+    }
+
+    header h1 {
+
+        font-size: 24px;
+    }
+
+    .noticia-admin img {
+
+        width: 100%;
+
+        height: 180px;
+    }
+
+    .botones-noticia {
+
+        display: block;
+    }
+
+    .botones-noticia button {
+
+        width: 100%;
+
+        margin-top: 8px;
+    }
+
 }
 
 </style>
+
 </head>
+
 
 <body>
 
+
 <header>
-    <h1>12 + 12 Noticias de Tigre</h1>
-    <p>Panel de administración</p>
+
+<h1>
+12 + 12 Noticias de Tigre
+</h1>
+
+<p>
+Panel de administración
+</p>
+
 </header>
+
 
 <div class="contenedor">
 
-    <!-- LOGIN -->
 
-    <div class="panel" id="login">
+<!-- =========================
+     LOGIN
+========================= -->
 
-        <h2>Ingresar</h2>
+<div
+    class="panel"
+    id="login"
+>
 
-        <label>Email</label>
-        <input type="email" id="email">
-
-        <label>Contraseña</label>
-        <input type="password" id="password">
-
-        <button onclick="iniciarSesion()">Ingresar</button>
-
-        <div id="mensajeLogin"></div>
-
-    </div>
+<h2>
+Ingresar
+</h2>
 
 
-    <!-- PANEL ADMIN -->
+<label>
+Email
+</label>
 
-    <div class="panel" id="panelAdmin">
+<input
+    type="email"
+    id="email"
+    autocomplete="email"
+>
 
-        <h2>Nueva noticia</h2>
 
-        <label>Título</label>
-        <input type="text" id="titulo">
+<label>
+Contraseña
+</label>
 
-        <label>Contenido</label>
-        <textarea id="contenido"></textarea>
+<input
+    type="password"
+    id="password"
+    autocomplete="current-password"
+>
 
-        <label>Categoría</label>
 
-        <select id="categoria">
-            <option value="TIGRE">TIGRE</option>
-            <option value="POLICIALES">POLICIALES</option>
-            <option value="INFORMACIÓN VECINAL">INFORMACIÓN VECINAL</option>
-            <option value="POLÍTICA">POLÍTICA</option>
-            <option value="DEPORTES">DEPORTES</option>
-            <option value="OBRAS Y SERVICIOS">OBRAS Y SERVICIOS</option>
-            <option value="SOCIEDAD">SOCIEDAD</option>
-            <option value="GENERAL">GENERAL</option>
-        </select>
+<button
+    onclick="iniciarSesion()"
+>
+Ingresar
+</button>
 
-        <label>Imagen</label>
-        <input type="file" id="imagen" accept="image/*">
 
-        <label>
-            <input type="checkbox" id="destacada">
-            Noticia destacada
-        </label>
-
-        <button onclick="publicarNoticia()" id="botonPublicar">
-            Publicar noticia
-        </button>
-
-        <button class="salida" onclick="cerrarSesion()">
-            Cerrar sesión
-        </button>
-
-        <div id="mensaje"></div>
-
-        <h2 style="margin-top:40px;">
-            Noticias publicadas
-        </h2>
-
-        <div id="listaNoticias"></div>
-
-    </div>
+<div
+    id="mensajeLogin"
+></div>
 
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- =========================
+     PANEL ADMIN
+========================= -->
+
+<div
+    class="panel"
+    id="panelAdmin"
+>
+
+
+<h2 id="tituloFormulario">
+Nueva noticia
+</h2>
+
+
+<div
+    id="avisoEdicion"
+    class="aviso-edicion"
+    style="display:none;"
+>
+✏️ Estás editando una noticia
+</div>
+
+
+<label>
+Título
+</label>
+
+<input
+    type="text"
+    id="titulo"
+>
+
+
+<label>
+Contenido
+</label>
+
+<textarea
+    id="contenido"
+></textarea>
+
+
+<label>
+Categoría
+</label>
+
+<select id="categoria">
+
+<option value="TIGRE">
+TIGRE
+</option>
+
+<option value="POLICIALES">
+POLICIALES
+</option>
+
+<option value="INFORMACIÓN VECINAL">
+INFORMACIÓN VECINAL
+</option>
+
+<option value="POLÍTICA">
+POLÍTICA
+</option>
+
+<option value="DEPORTES">
+DEPORTES
+</option>
+
+<option value="OBRAS Y SERVICIOS">
+OBRAS Y SERVICIOS
+</option>
+
+<option value="SOCIEDAD">
+SOCIEDAD
+</option>
+
+<option value="GENERAL">
+GENERAL
+</option>
+
+</select>
+
+
+<label>
+Imagen
+</label>
+
+<input
+    type="file"
+    id="imagen"
+    accept="image/*"
+>
+
+
+<div
+    id="imagenActual"
+    style="margin-top:10px;"
+></div>
+
+
+<label>
+
+<input
+    type="checkbox"
+    id="destacada"
+>
+
+Noticia destacada
+
+</label>
+
+
+<button
+    onclick="guardarNoticia()"
+    id="botonGuardar"
+>
+Publicar noticia
+</button>
+
+
+<button
+    onclick="cancelarEdicion()"
+    id="botonCancelar"
+    class="boton-gris"
+    style="display:none;"
+>
+Cancelar edición
+</button>
+
+
+<button
+    onclick="cerrarSesion()"
+    class="boton-gris"
+>
+Cerrar sesión
+</button>
+
+
+<div
+    id="mensaje"
+></div>
+
+
+<hr
+    style="
+        margin:40px 0;
+        border:0;
+        border-top:1px solid #ddd;
+    "
+>
+
+
+<h2>
+Noticias publicadas
+</h2>
+
+
+<div
+    id="listaNoticias"
+>
+Cargando noticias...
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     SUPABASE
+========================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
+
 
 <script>
 
+
 const SUPABASE_URL =
-    "https://piyabciajfhlarvecdvu.supabase.co";
+"https://piyabciajfhlarvecdvu.supabase.co";
+
 
 const SUPABASE_KEY =
-    "sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK";
+"sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK";
+
 
 const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 
-// ===============================
-// INICIAR SESIÓN
-// ===============================
+/* =========================
+   VARIABLE EDICIÓN
+========================= */
+
+let noticiaEditando = null;
+
+
+/* =========================
+   INICIAR SESIÓN
+========================= */
 
 async function iniciarSesion() {
 
+
     const email =
-        document.getElementById("email").value.trim();
+        document.getElementById(
+            "email"
+        ).value.trim();
+
 
     const password =
-        document.getElementById("password").value;
+        document.getElementById(
+            "password"
+        ).value;
 
-    if (!email || !password) {
 
-        document.getElementById("mensajeLogin").innerText =
-            "Ingresá el email y la contraseña.";
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+        .auth
+        .signInWithPassword({
 
-        return;
-    }
-
-    const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
             email: email,
+
             password: password
+
         });
+
 
     if (error) {
 
-        document.getElementById("mensajeLogin").innerText =
-            "Error: " + error.message;
+        document.getElementById(
+            "mensajeLogin"
+        ).innerText =
+            "Error: " +
+            error.message;
 
         return;
     }
 
-    document.getElementById("login").style.display =
+
+    document.getElementById(
+        "login"
+    ).style.display =
         "none";
 
-    document.getElementById("panelAdmin").style.display =
+
+    document.getElementById(
+        "panelAdmin"
+    ).style.display =
         "block";
 
+
     cargarNoticias();
+
 }
 
 
-// ===============================
-// PUBLICAR / EDITAR NOTICIA
-// ===============================
+/* =========================
+   GUARDAR NOTICIA
+========================= */
 
-async function publicarNoticia() {
+async function guardarNoticia() {
+
 
     const titulo =
-        document.getElementById("titulo").value.trim();
+        document.getElementById(
+            "titulo"
+        ).value.trim();
+
 
     const contenido =
-        document.getElementById("contenido").value.trim();
+        document.getElementById(
+            "contenido"
+        ).value.trim();
+
 
     const categoria =
-        document.getElementById("categoria").value;
+        document.getElementById(
+            "categoria"
+        ).value;
+
 
     const destacada =
-        document.getElementById("destacada").checked;
+        document.getElementById(
+            "destacada"
+        ).checked;
+
 
     const archivo =
-        document.getElementById("imagen").files[0];
+        document.getElementById(
+            "imagen"
+        ).files[0];
 
 
-    if (!titulo || !contenido) {
+    if (!titulo) {
 
-        document.getElementById("mensaje").innerText =
-            "Completá el título y el contenido.";
+        document.getElementById(
+            "mensaje"
+        ).innerText =
+            "⚠️ Escribí un título.";
 
         return;
     }
 
 
-    // ===============================
-    // EDITAR NOTICIA EXISTENTE
-    // ===============================
+    if (!contenido) {
 
-    if (window.noticiaEditando) {
+        document.getElementById(
+            "mensaje"
+        ).innerText =
+            "⚠️ Escribí el contenido.";
 
-        const datosActualizar = {
-            titulo: titulo,
-            contenido: contenido,
-            categoria: categoria,
-            destacada: destacada
+        return;
+    }
+
+
+    /* =========================
+       EDITAR
+    ========================= */
+
+    if (noticiaEditando) {
+
+
+        let datosActualizar = {
+
+            titulo:
+                titulo,
+
+            contenido:
+                contenido,
+
+            categoria:
+                categoria,
+
+            destacada:
+                destacada
+
         };
 
 
-        // Si se seleccionó una nueva imagen,
-        // también la subimos.
+        /* NUEVA IMAGEN */
 
         if (archivo) {
 
-            const nombreArchivo =
-                Date.now() + "_" + archivo.name;
 
-            const { error: errorSubida } =
+            const nombreArchivo =
+                Date.now() +
+                "_" +
+                archivo.name;
+
+
+            const {
+                error:
+                errorSubida
+            } =
                 await supabaseClient
                 .storage
                 .from("noticias")
@@ -325,9 +811,12 @@ async function publicarNoticia() {
                     archivo
                 );
 
+
             if (errorSubida) {
 
-                document.getElementById("mensaje").innerText =
+                document.getElementById(
+                    "mensaje"
+                ).innerText =
                     "Error al subir la imagen: " +
                     errorSubida.message;
 
@@ -335,19 +824,25 @@ async function publicarNoticia() {
             }
 
 
-            const { data: urlImagen } =
+            const {
+                data:
+                urlImagen
+            } =
                 supabaseClient
                 .storage
                 .from("noticias")
-                .getPublicUrl(nombreArchivo);
+                .getPublicUrl(
+                    nombreArchivo
+                );
+
 
             datosActualizar.imagen =
                 urlImagen.publicUrl;
+
         }
 
 
-        // Si esta noticia pasa a ser destacada,
-        // quitamos el destaque de las demás.
+        /* QUITAR DESTACADA DE OTRA */
 
         if (destacada) {
 
@@ -356,20 +851,33 @@ async function publicarNoticia() {
             .update({
                 destacada: false
             })
-            .eq("destacada", true);
+            .eq(
+                "destacada",
+                true
+            );
+
         }
 
 
-        const { error } =
+        const {
+            error
+        } =
             await supabaseClient
             .from("noticias")
-            .update(datosActualizar)
-            .eq("id", window.noticiaEditando);
+            .update(
+                datosActualizar
+            )
+            .eq(
+                "id",
+                noticiaEditando
+            );
 
 
         if (error) {
 
-            document.getElementById("mensaje").innerText =
+            document.getElementById(
+                "mensaje"
+            ).innerText =
                 "Error al actualizar: " +
                 error.message;
 
@@ -377,36 +885,43 @@ async function publicarNoticia() {
         }
 
 
-        document.getElementById("mensaje").innerText =
+        document.getElementById(
+            "mensaje"
+        ).innerText =
             "✅ Noticia actualizada correctamente.";
 
-        window.noticiaEditando = null;
 
-        document.getElementById("botonPublicar").innerText =
-            "Publicar noticia";
+        cancelarEdicion();
 
-        limpiarFormulario();
 
         cargarNoticias();
 
+
         return;
+
     }
 
 
-    // ===============================
-    // PUBLICAR NOTICIA NUEVA
-    // ===============================
+    /* =========================
+       PUBLICAR NUEVA
+    ========================= */
 
     let imagen = "";
 
 
     if (archivo) {
 
+
         const nombreArchivo =
-            Date.now() + "_" + archivo.name;
+            Date.now() +
+            "_" +
+            archivo.name;
 
 
-        const { error: errorSubida } =
+        const {
+            error:
+            errorSubida
+        } =
             await supabaseClient
             .storage
             .from("noticias")
@@ -418,7 +933,9 @@ async function publicarNoticia() {
 
         if (errorSubida) {
 
-            document.getElementById("mensaje").innerText =
+            document.getElementById(
+                "mensaje"
+            ).innerText =
                 "Error al subir la imagen: " +
                 errorSubida.message;
 
@@ -426,20 +943,27 @@ async function publicarNoticia() {
         }
 
 
-        const { data: urlImagen } =
+        const {
+            data:
+            urlImagen
+        } =
             supabaseClient
             .storage
             .from("noticias")
-            .getPublicUrl(nombreArchivo);
+            .getPublicUrl(
+                nombreArchivo
+            );
 
 
         imagen =
             urlImagen.publicUrl;
+
     }
 
 
-    // Si la nueva noticia es destacada,
-    // quitamos el destaque de las anteriores.
+    /* =========================
+       SI ES DESTACADA
+    ========================= */
 
     if (destacada) {
 
@@ -448,94 +972,107 @@ async function publicarNoticia() {
         .update({
             destacada: false
         })
-        .eq("destacada", true);
+        .eq(
+            "destacada",
+            true
+        );
+
     }
 
 
-    const { error } =
+    const {
+        error
+    } =
         await supabaseClient
         .from("noticias")
         .insert({
 
-            titulo: titulo,
+            titulo:
+                titulo,
 
-            contenido: contenido,
+            contenido:
+                contenido,
 
-            categoria: categoria,
+            categoria:
+                categoria,
 
-            imagen: imagen,
+            imagen:
+                imagen,
 
-            destacada: destacada
+            destacada:
+                destacada
+
         });
 
 
     if (error) {
 
-        document.getElementById("mensaje").innerText =
-            "Error: " + error.message;
+        document.getElementById(
+            "mensaje"
+        ).innerText =
+            "Error: " +
+            error.message;
 
         return;
     }
 
 
-    document.getElementById("mensaje").innerText =
+    document.getElementById(
+        "mensaje"
+    ).innerText =
         "✅ ¡Noticia publicada correctamente!";
 
 
     limpiarFormulario();
 
+
     cargarNoticias();
+
 }
 
 
-// ===============================
-// LIMPIAR FORMULARIO
-// ===============================
-
-function limpiarFormulario() {
-
-    document.getElementById("titulo").value =
-        "";
-
-    document.getElementById("contenido").value =
-        "";
-
-    document.getElementById("imagen").value =
-        "";
-
-    document.getElementById("destacada").checked =
-        false;
-}
-
-
-// ===============================
-// CARGAR NOTICIAS
-// ===============================
+/* =========================
+   CARGAR TODAS LAS NOTICIAS
+========================= */
 
 async function cargarNoticias() {
 
-    const { data, error } =
+
+    const {
+        data,
+        error
+    } =
         await supabaseClient
         .from("noticias")
         .select("*")
-        .order("fecha", {
-            ascending: false
-        });
+        .order(
+            "fecha",
+            {
+                ascending: false
+            }
+        );
 
 
     if (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
 
-        document.getElementById("listaNoticias").innerHTML =
-            "<p>Error al cargar las noticias.</p>";
+        document.getElementById(
+            "listaNoticias"
+        ).innerHTML =
+            "❌ Error cargando noticias: " +
+            error.message;
 
         return;
     }
 
 
     const lista =
-        document.getElementById("listaNoticias");
+        document.getElementById(
+            "listaNoticias"
+        );
 
 
     lista.innerHTML = "";
@@ -550,80 +1087,133 @@ async function cargarNoticias() {
     }
 
 
-    data.forEach(noticia => {
-
-        const div =
-            document.createElement("div");
-
-        div.className =
-            "noticia";
+    data.forEach(
+        noticia => {
 
 
-        div.innerHTML = `
+            const div =
+                document.createElement(
+                    "div"
+                );
 
-            <h3>
-                ${noticia.titulo}
-            </h3>
 
-            <p>
-                <strong>Categoría:</strong>
-                ${noticia.categoria || "GENERAL"}
-            </p>
+            div.className =
+                "noticia-admin";
 
-            ${
-                noticia.destacada
-                ? "<p><strong>⭐ NOTICIA DESTACADA</strong></p>"
-                : ""
-            }
 
-            <button
-                onclick="editarNoticia(${noticia.id})">
-                ✏️ Editar
-            </button>
+            div.innerHTML = `
 
-            <button
-                onclick="cambiarDestacada(
-                    ${noticia.id},
-                    ${noticia.destacada}
-                )">
+                <h3>
+                    ${noticia.titulo}
+                </h3>
+
+
+                <p>
+                    <strong>Categoría:</strong>
+                    ${noticia.categoria || "GENERAL"}
+                </p>
+
 
                 ${
                     noticia.destacada
-                    ? "☆ Quitar destaque"
-                    : "⭐ Destacar"
+
+                    ?
+
+                    `
+                    <div class="estado-destacada">
+                        ⭐ NOTICIA DESTACADA
+                    </div>
+                    `
+
+                    :
+
+                    ""
                 }
 
-            </button>
 
-            <button
-                onclick="eliminarNoticia(${noticia.id})"
-                style="background:#333;">
+                ${
+                    noticia.imagen
 
-                🗑️ Eliminar
+                    ?
 
-            </button>
+                    `
+                    <img
+                        src="${noticia.imagen}"
+                        alt="${noticia.titulo}"
+                    >
+                    `
 
-        `;
+                    :
+
+                    ""
+                }
 
 
-        lista.appendChild(div);
+                <div class="botones-noticia">
 
-    });
+
+                    <button
+                        class="boton-editar"
+                        onclick="editarNoticia(${noticia.id})"
+                    >
+                        ✏️ Editar
+                    </button>
+
+
+                    <button
+                        onclick="cambiarDestacada(
+                            ${noticia.id},
+                            ${noticia.destacada}
+                        )"
+                    >
+
+                        ${
+                            noticia.destacada
+
+                            ?
+
+                            "☆ Quitar destaque"
+
+                            :
+
+                            "⭐ Destacar"
+                        }
+
+                    </button>
+
+
+                    <button
+                        class="boton-gris"
+                        onclick="eliminarNoticia(${noticia.id})"
+                    >
+                        🗑️ Eliminar
+                    </button>
+
+
+                </div>
+
+            `;
+
+
+            lista.appendChild(
+                div
+            );
+
+        }
+    );
 
 }
 
 
-// ===============================
-// DESTACAR / QUITAR DESTACADA
-// ===============================
+/* =========================
+   DESTACAR
+========================= */
 
 async function cambiarDestacada(
     id,
     actualmenteDestacada
 ) {
 
-    // Si vamos a destacar esta noticia,
-    // primero quitamos el destaque de todas.
 
     if (!actualmenteDestacada) {
 
@@ -632,23 +1222,36 @@ async function cambiarDestacada(
         .update({
             destacada: false
         })
-        .eq("destacada", true);
+        .eq(
+            "destacada",
+            true
+        );
+
     }
 
 
-    const { error } =
+    const {
+        error
+    } =
         await supabaseClient
         .from("noticias")
         .update({
-            destacada: !actualmenteDestacada
+
+            destacada:
+                !actualmenteDestacada
+
         })
-        .eq("id", id);
+        .eq(
+            "id",
+            id
+        );
 
 
     if (error) {
 
         alert(
-            "Error: " + error.message
+            "Error: " +
+            error.message
         );
 
         return;
@@ -656,116 +1259,314 @@ async function cambiarDestacada(
 
 
     cargarNoticias();
+
 }
 
 
-// ===============================
-// ELIMINAR NOTICIA
-// ===============================
-
-async function eliminarNoticia(id) {
-
-    if (
-        !confirm(
-            "¿Seguro que querés eliminar esta noticia?"
-        )
-    ) {
-        return;
-    }
-
-
-    const { error } =
-        await supabaseClient
-        .from("noticias")
-        .delete()
-        .eq("id", id);
-
-
-    if (error) {
-
-        alert(
-            "Error: " + error.message
-        );
-
-        return;
-    }
-
-
-    cargarNoticias();
-}
-
-
-// ===============================
-// EDITAR NOTICIA
-// ===============================
+/* =========================
+   EDITAR
+========================= */
 
 async function editarNoticia(id) {
 
-    const { data, error } =
+
+    const {
+        data,
+        error
+    } =
         await supabaseClient
         .from("noticias")
         .select("*")
-        .eq("id", id)
+        .eq(
+            "id",
+            id
+        )
         .single();
 
 
     if (error) {
 
         alert(
-            "Error: " + error.message
+            "Error: " +
+            error.message
         );
 
         return;
     }
 
 
-    document.getElementById("titulo").value =
-        data.titulo || "";
-
-
-    document.getElementById("contenido").value =
-        data.contenido || "";
-
-
-    document.getElementById("categoria").value =
-        data.categoria || "GENERAL";
-
-
-    document.getElementById("destacada").checked =
-        data.destacada || false;
-
-
-    window.noticiaEditando =
+    noticiaEditando =
         id;
 
 
-    document.getElementById("botonPublicar").innerText =
+    document.getElementById(
+        "titulo"
+    ).value =
+        data.titulo || "";
+
+
+    document.getElementById(
+        "contenido"
+    ).value =
+        data.contenido || "";
+
+
+    document.getElementById(
+        "categoria"
+    ).value =
+        data.categoria ||
+        "GENERAL";
+
+
+    document.getElementById(
+        "destacada"
+    ).checked =
+        data.destacada ||
+        false;
+
+
+    document.getElementById(
+        "imagen"
+    ).value =
+        "";
+
+
+    if (data.imagen) {
+
+        document.getElementById(
+            "imagenActual"
+        ).innerHTML = `
+
+            <p>
+                <strong>
+                    Imagen actual:
+                </strong>
+            </p>
+
+            <img
+                src="${data.imagen}"
+                style="
+                    width:180px;
+                    height:110px;
+                    object-fit:cover;
+                    border-radius:6px;
+                "
+            >
+
+            <p>
+                Si no elegís otra imagen,
+                se conservará esta.
+            </p>
+
+        `;
+
+    } else {
+
+        document.getElementById(
+            "imagenActual"
+        ).innerHTML = "";
+
+    }
+
+
+    document.getElementById(
+        "tituloFormulario"
+    ).innerText =
+        "Editar noticia";
+
+
+    document.getElementById(
+        "avisoEdicion"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "botonGuardar"
+    ).innerText =
         "💾 Guardar cambios";
 
 
-    document.getElementById("mensaje").innerText =
-        "✏️ Estás editando la noticia. Modificá los datos y después presioná «Guardar cambios».";
+    document.getElementById(
+        "botonCancelar"
+    ).style.display =
+        "inline-block";
+
+
+    document.getElementById(
+        "panelAdmin"
+    ).classList.add(
+        "modo-edicion"
+    );
 
 
     window.scrollTo({
+
         top: 0,
+
         behavior: "smooth"
+
     });
+
 }
 
 
-// ===============================
-// CERRAR SESIÓN
-// ===============================
+/* =========================
+   CANCELAR EDICIÓN
+========================= */
+
+function cancelarEdicion() {
+
+
+    noticiaEditando =
+        null;
+
+
+    limpiarFormulario();
+
+
+    document.getElementById(
+        "tituloFormulario"
+    ).innerText =
+        "Nueva noticia";
+
+
+    document.getElementById(
+        "avisoEdicion"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "botonGuardar"
+    ).innerText =
+        "Publicar noticia";
+
+
+    document.getElementById(
+        "botonCancelar"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "panelAdmin"
+    ).classList.remove(
+        "modo-edicion"
+    );
+
+}
+
+
+/* =========================
+   LIMPIAR
+========================= */
+
+function limpiarFormulario() {
+
+
+    document.getElementById(
+        "titulo"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "contenido"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "imagen"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "destacada"
+    ).checked =
+        false;
+
+
+    document.getElementById(
+        "categoria"
+    ).value =
+        "TIGRE";
+
+
+    document.getElementById(
+        "imagenActual"
+    ).innerHTML =
+        "";
+
+}
+
+
+/* =========================
+   ELIMINAR
+========================= */
+
+async function eliminarNoticia(id) {
+
+
+    if (
+        !confirm(
+            "¿Seguro que querés eliminar esta noticia?"
+        )
+    ) {
+
+        return;
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+        .from("noticias")
+        .delete()
+        .eq(
+            "id",
+            id
+        );
+
+
+    if (error) {
+
+        alert(
+            "Error: " +
+            error.message
+        );
+
+        return;
+    }
+
+
+    cargarNoticias();
+
+}
+
+
+/* =========================
+   CERRAR SESIÓN
+========================= */
 
 async function cerrarSesion() {
 
-    await supabaseClient.auth.signOut();
+
+    await supabaseClient
+        .auth
+        .signOut();
+
 
     location.reload();
+
 }
+
 
 </script>
 
 </body>
+
 </html>
