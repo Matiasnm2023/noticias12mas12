@@ -302,84 +302,8 @@ LEER NOTICIA
 Últimas noticias
 </h2>
 
-<div class="noticias">
-
-<div class="noticia">
-
-<div class="foto">
-FOTO
+<div class="noticias" id="listaNoticias">
 </div>
-
-<div class="texto">
-
-<h3>
-Noticias de Tigre
-</h3>
-
-<p>
-Información y actualidad de nuestra ciudad.
-</p>
-
-<a class="boton" href="#">
-Leer más
-</a>
-
-</div>
-
-</div>
-
-
-<div class="noticia">
-
-<div class="foto">
-FOTO
-</div>
-
-<div class="texto">
-
-<h3>
-Información vecinal
-</h3>
-
-<p>
-Los vecinos también son protagonistas de las noticias.
-</p>
-
-<a class="boton" href="#">
-Leer más
-</a>
-
-</div>
-
-</div>
-
-
-<div class="noticia">
-
-<div class="foto">
-FOTO
-</div>
-
-<div class="texto">
-
-<h3>
-Policiales
-</h3>
-
-<p>
-Las principales noticias policiales de la zona.
-</p>
-
-<a class="boton" href="#">
-Leer más
-</a>
-
-</div>
-
-</div>
-
-</div>
-
 
 <h2 class="seccion-titulo">
 Secciones
@@ -455,9 +379,40 @@ async function cargarNoticias() {
         return;
     }
 
-    console.log("Noticias encontradas:", data);
-}
+    const lista = document.getElementById("listaNoticias");
 
+    lista.innerHTML = "";
+
+    data.forEach(noticia => {
+
+        const tarjeta = document.createElement("div");
+
+        tarjeta.className = "noticia";
+
+        tarjeta.innerHTML = `
+            <div class="foto">
+                ${noticia.imagen
+                    ? `<img src="${noticia.imagen}" style="width:100%;height:100%;object-fit:cover;">`
+                    : "NOTICIA"
+                }
+            </div>
+
+            <div class="texto">
+
+                <h3>${noticia.titulo}</h3>
+
+                <p>${noticia.contenido || ""}</p>
+
+                <span class="boton">
+                    ${noticia.categoria || "GENERAL"}
+                </span>
+
+            </div>
+        `;
+
+        lista.appendChild(tarjeta);
+    });
+}
 cargarNoticias();
 </script>
 </body>
