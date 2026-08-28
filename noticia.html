@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 
 <html lang="es">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>12 + 12 Noticias de Tigre</title>
 
@@ -30,8 +34,8 @@ header {
 }
 
 .logo img {
-    width: 90px;
-    height: 90px;
+    width: 110px;
+    height: 110px;
     object-fit: cover;
     border-radius: 50%;
 }
@@ -84,6 +88,10 @@ nav a:hover {
     box-shadow: 0 2px 10px rgba(0,0,0,0.12);
 }
 
+.contenido {
+    padding: 30px;
+}
+
 .categoria {
     display: inline-block;
     background: #e30613;
@@ -93,10 +101,6 @@ nav a:hover {
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 15px;
-}
-
-.contenido {
-    padding: 30px;
 }
 
 h1 {
@@ -113,7 +117,7 @@ h1 {
 
 .imagen-principal {
     width: 100%;
-    max-height: 500px;
+    max-height: 550px;
     object-fit: cover;
     display: block;
 }
@@ -125,7 +129,7 @@ h1 {
     text-align: justify;
 }
 
-/* BOTÓN VOLVER */
+/* VOLVER */
 
 .volver {
     display: inline-block;
@@ -213,6 +217,11 @@ footer {
         font-size: 13px;
     }
 
+    .logo img {
+        width: 95px;
+        height: 95px;
+    }
+
 }
 
 </style>
@@ -223,62 +232,85 @@ footer {
 
 <header>
 
-```
 <div class="logo">
 
-    <img src="./logo.jpg"
-         alt="12 + 12 Noticias de Tigre">
+<img
+src="./logo.jpg"
+alt="12 + 12 Noticias de Tigre">
 
-    <div class="logo-text">
-        12 + 12
-    </div>
+<div class="logo-text">
+12 + 12
+</div>
 
 </div>
 
 <div class="subtitulo">
-    Noticias de Tigre
+Noticias de Tigre
 </div>
-```
 
 </header>
 
 <nav>
 
-```
-<a href="index.html">INICIO</a>
-<a href="index.html">TIGRE</a>
-<a href="index.html">POLICIALES</a>
-<a href="index.html">INFORMACIÓN VECINAL</a>
-<a href="index.html">POLÍTICA</a>
-<a href="index.html">DEPORTES</a>
-<a href="index.html">GENERAL</a>
-```
+<a href="./index.html">
+INICIO
+</a>
+
+<a href="./index.html">
+TIGRE
+</a>
+
+<a href="./index.html">
+POLICIALES
+</a>
+
+<a href="./index.html">
+INFORMACIÓN VECINAL
+</a>
+
+<a href="./index.html">
+POLÍTICA
+</a>
+
+<a href="./index.html">
+DEPORTES
+</a>
+
+<a href="./index.html">
+GENERAL
+</a>
 
 </nav>
 
 <div class="contenedor">
 
-```
 <article class="noticia-completa">
 
-    <div id="contenidoNoticia">
+<div id="contenidoNoticia">
 
-        <div class="error">
-            <h2>Cargando noticia...</h2>
-            <p>Esperá unos segundos.</p>
-        </div>
+<div class="error">
 
-    </div>
+<h2>
+Cargando noticia...
+</h2>
+
+<p>
+Esperá unos segundos.
+</p>
+
+</div>
+
+</div>
 
 </article>
-```
 
 </div>
 
 <footer>
 
-```
-<strong>12 + 12 Noticias de Tigre</strong>
+<strong>
+12 + 12 Noticias de Tigre
+</strong>
 
 <br><br>
 
@@ -287,11 +319,12 @@ Información local y actualidad
 <br><br>
 
 © 2026 - Todos los derechos reservados
-```
 
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script
+src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
 
 <script>
 
@@ -309,226 +342,271 @@ supabase.createClient(
 );
 
 
-// OBTENER ID DE LA NOTICIA
+/* OBTENER ID */
 
 const parametros =
-new URLSearchParams(window.location.search);
+new URLSearchParams(
+    window.location.search
+);
 
 const id =
 parametros.get("id");
 
 
-// CARGAR NOTICIA
+/* CARGAR NOTICIA */
 
 async function cargarNoticia() {
 
-    const contenedor =
-    document.getElementById("contenidoNoticia");
+const contenedor =
+document.getElementById(
+    "contenidoNoticia"
+);
 
 
-    if (!id) {
+if (!id) {
 
-        contenedor.innerHTML = `
-            <div class="error">
-                <h2>Noticia no encontrada</h2>
+contenedor.innerHTML = `
 
-                <p>
-                    No se indicó qué noticia querés ver.
-                </p>
+<div class="error">
 
-                <a class="volver" href="index.html">
-                    ← Volver a las noticias
-                </a>
-            </div>
-        `;
+<h2>
+Noticia no encontrada
+</h2>
 
-        return;
+<p>
+No se indicó qué noticia querés ver.
+</p>
+
+<a
+class="volver"
+href="./index.html">
+
+← Volver a las noticias
+
+</a>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+const { data, error } =
+await supabaseClient
+.from("noticias")
+.select("*")
+.eq("id", id)
+.single();
+
+
+if (error || !data) {
+
+console.error(error);
+
+contenedor.innerHTML = `
+
+<div class="error">
+
+<h2>
+Noticia no encontrada
+</h2>
+
+<p>
+La noticia que buscás no existe
+o fue eliminada.
+</p>
+
+<a
+class="volver"
+href="./index.html">
+
+← Volver a las noticias
+
+</a>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+/* FECHA */
+
+let fechaTexto = "";
+
+if (data.fecha) {
+
+const fecha =
+new Date(data.fecha);
+
+fechaTexto =
+fecha.toLocaleDateString(
+    "es-AR",
+    {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
     }
+);
+
+}
 
 
-    const { data, error } =
-    await supabaseClient
-    .from("noticias")
-    .select("*")
-    .eq("id", id)
-    .single();
+/* CONTENIDO */
+
+let contenidoHTML = "";
+
+if (data.contenido) {
+
+contenidoHTML =
+data.contenido
+.split(/\n\s*\n/)
+.map(parrafo => {
+
+return `
+<p>
+${parrafo.trim()}
+</p>
+`;
+
+})
+.join("");
+
+}
 
 
-    if (error || !data) {
+/* URL */
 
-        console.error(error);
-
-        contenedor.innerHTML = `
-            <div class="error">
-
-                <h2>Noticia no encontrada</h2>
-
-                <p>
-                    La noticia que buscás no existe
-                    o fue eliminada.
-                </p>
-
-                <a class="volver" href="index.html">
-                    ← Volver a las noticias
-                </a>
-
-            </div>
-        `;
-
-        return;
-    }
+const urlActual =
+window.location.href;
 
 
-    // FECHA
+/* WHATSAPP */
 
-    let fechaTexto = "";
-
-    if (data.fecha) {
-
-        const fecha =
-        new Date(data.fecha);
-
-        fechaTexto =
-        fecha.toLocaleDateString(
-            "es-AR",
-            {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric"
-            }
-        );
-
-    }
+const whatsapp =
+"https://wa.me/?text=" +
+encodeURIComponent(
+    data.titulo +
+    " - " +
+    urlActual
+);
 
 
-    // CONTENIDO
+/* FACEBOOK */
 
-    let contenidoHTML = "";
-
-    if (data.contenido) {
-
-        contenidoHTML =
-        data.contenido
-        .split(/\n\s*\n/)
-        .map(parrafo => {
-
-            return `
-                <p>
-                    ${parrafo.trim()}
-                </p>
-            `;
-
-        })
-        .join("");
-
-    }
+const facebook =
+"https://www.facebook.com/sharer/sharer.php?u=" +
+encodeURIComponent(
+    urlActual
+);
 
 
-    // URL ACTUAL
+/* MOSTRAR */
 
-    const urlActual =
-    window.location.href;
+contenedor.innerHTML = `
 
+<div class="contenido">
 
-    // WHATSAPP
+<span class="categoria">
 
-    const whatsapp =
-    "https://wa.me/?text=" +
-    encodeURIComponent(
-        data.titulo + " - " + urlActual
-    );
+${data.categoria || "GENERAL"}
+
+</span>
 
 
-    // FACEBOOK
+<h1>
 
-    const facebook =
-    "https://www.facebook.com/sharer/sharer.php?u=" +
-    encodeURIComponent(urlActual);
+${data.titulo}
 
-
-    contenedor.innerHTML = `
-
-        <div class="contenido">
-
-            <span class="categoria">
-                ${data.categoria || "GENERAL"}
-            </span>
+</h1>
 
 
-            <h1>
-                ${data.titulo}
-            </h1>
+${
+fechaTexto
+?
+`
+<div class="fecha">
+
+📅 Publicado el ${fechaTexto}
+
+</div>
+`
+:
+""
+}
+
+</div>
 
 
-            ${
-                fechaTexto
-                ?
-                `<div class="fecha">
-                    📅 Publicado el ${fechaTexto}
-                </div>`
-                :
-                ""
-            }
-
-        </div>
-
-
-        ${
-            data.imagen
-            ?
-            `<img
-                class="imagen-principal"
-                src="${data.imagen}"
-                alt="${data.titulo}"
-            >`
-            :
-            ""
-        }
+${
+data.imagen
+?
+`
+<img
+class="imagen-principal"
+src="${data.imagen}"
+alt="${data.titulo}">
+`
+:
+""
+}
 
 
-        <div class="contenido">
+<div class="contenido">
 
-            <div class="texto-noticia">
+<div class="texto-noticia">
 
-                ${contenidoHTML}
+${contenidoHTML}
 
-            </div>
-
-
-            <div class="compartir">
-
-                <strong>
-                    Compartir esta noticia
-                </strong>
-
-                <a
-                    class="whatsapp"
-                    href="${whatsapp}"
-                    target="_blank">
-                    WhatsApp
-                </a>
-
-                <a
-                    class="facebook"
-                    href="${facebook}"
-                    target="_blank">
-                    Facebook
-                </a>
-
-            </div>
+</div>
 
 
-            <a
-                class="volver"
-                href="index.html">
+<div class="compartir">
 
-                ← Volver a las noticias
+<strong>
+Compartir esta noticia
+</strong>
 
-            </a>
 
-        </div>
+<a
+class="whatsapp"
+href="${whatsapp}"
+target="_blank">
 
-    `;
+WhatsApp
+
+</a>
+
+
+<a
+class="facebook"
+href="${facebook}"
+target="_blank">
+
+Facebook
+
+</a>
+
+</div>
+
+
+<a
+class="volver"
+href="./index.html">
+
+← Volver a las noticias
+
+</a>
+
+</div>
+
+`;
 
 }
 
@@ -538,4 +616,5 @@ cargarNoticia();
 </script>
 
 </body>
+
 </html>
