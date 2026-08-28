@@ -432,6 +432,33 @@ Información local y actualidad
 © 2026 - Todos los derechos reservados
 
 </footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+const SUPABASE_URL = "https://piyabciajfhlarvecdvu.supabase.co";
+const SUPABASE_KEY = "sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK";
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+async function cargarNoticias() {
+
+    const { data, error } = await supabaseClient
+        .from("noticias")
+        .select("*")
+        .order("fecha", { ascending: false });
+
+    if (error) {
+        console.error("Error cargando noticias:", error);
+        return;
+    }
+
+    console.log("Noticias encontradas:", data);
+}
+
+cargarNoticias();
+</script>
 </body>
 </html>
