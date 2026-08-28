@@ -175,7 +175,7 @@ button:hover {
         </select>
 
         <label>Imagen</label>
-        <input type="text" id="imagen" placeholder="URL de la imagen">
+    <input type="file" id="imagen" accept="image/*">
 
         <label>
             <input type="checkbox" id="destacada">
@@ -203,7 +203,7 @@ button:hover {
 
 const SUPABASE_URL = "https://piyabciajfhlarvecdvu.supabase.co";
 
-const SUPABASE_KEY = "sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK"
+const SUPABASE_KEY = "sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK";
 
 const supabaseClient = supabase.createClient(
     SUPABASE_URL,
@@ -255,9 +255,37 @@ async function publicarNoticia() {
     const categoria =
         document.getElementById("categoria").value;
 
-    const imagen =
-        document.getElementById("imagen").value;
+    const archivo = document.getElementById("imagen").files[0];
 
+let imagen = "";
+
+if (archivo) {
+
+    const nombreArchivo =
+        Date.now() + "_" + archivo.name;
+
+    const { error: errorSubida } =
+        await supabaseClient
+        .storage
+        .from("noticias")
+        .upload(nombreArchivo, archivo);
+
+    if (errorSubida) {
+
+        document.getElementById("mensaje").innerText =
+            "Error al subir la imagen: " + errorSubida.message;
+
+        return;
+    }
+
+    const { data: urlImagen } =
+        supabaseClient
+        .storage
+        .from("noticias")
+        .getPublicUrl(nombreArchivo);
+
+    imagen = urlImagen.publicUrl;
+}
     const destacada =
         document.getElementById("destacada").checked;
 
