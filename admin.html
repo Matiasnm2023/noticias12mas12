@@ -255,28 +255,120 @@ async function publicarNoticia() {
     const categoria =
         document.getElementById("categoria").value;
 
-    const archivo = document.getElementById("imagen").files[0];
+    const destacada =
+        document.getElementById("destacada").checked;
 
-let imagen = "";
 
-if (archivo) {
+    // SI ESTAMOS EDITANDO UNA NOTICIA
 
-    const nombreArchivo =
-        Date.now() + "_" + archivo.name;
+    if (window.noticiaEditando) {
 
-    const { error: errorSubida } =
-        await supabaseClient
-        .storage
-        .from("noticias")
-        .upload(nombreArchivo, archivo);
+        const { error } =
+            await supabaseClient
+            .from("noticias")
+            .update({
+                titulo: titulo,
+                contenido: contenido,
+                categoria: categoria,
+                destacada: destacada
+            })
+            .eq("id", window.noticiaEditando);
 
-    if (errorSubida) {
+        if (error) {
+
+            document.getElementById("mensaje").innerText =
+                "Error al actualizar: " + error.message;
+
+            return;
+        }
 
         document.getElementById("mensaje").innerText =
-            "Error al subir la imagen: " + errorSubida.message;
+            "✅ Noticia actualizada correctamente.";
+
+        window.noticiaEditando = null;
+
+        document.getElementById("titulo").value = "";
+        document.getElementById("contenido").value = "";
+        document.getElementById("imagen").value = "";
+        document.getElementById("destacada").checked = false;
+
+        cargarNoticias();
 
         return;
     }
+
+
+    // PUBLICAR UNA NOTICIA NUEVA
+
+    const archivo =
+        document.getElementById("imagen").files[0];
+
+    let imagen = "";
+
+    if (archivo) {
+
+        const nombreArchivo =
+            Date.now() + "_" + archivo.name;
+
+        const { error: errorSubida } =
+            await supabaseClient
+            .storage
+            .from("noticias")
+            .upload(nombreArchivo, archivo);
+
+        if (errorSubida) {
+
+            document.getElementById("mensaje").innerText =
+                "Error al subir la imagen: " +
+                errorSubida.message;
+
+            return;
+        }
+
+        const { data: urlImagen } =
+            supabaseClient
+            .storage
+            .from("noticias")
+            .getPublicUrl(nombreArchivo);
+
+        imagen = urlImagen.publicUrl;
+    }
+
+
+    const { error } =
+        await supabaseClient
+        .from("noticias")
+        .insert({
+
+            titulo: titulo,
+            contenido: contenido,
+            categoria: categoria,
+            imagen: imagen,
+            destacada: destacada
+
+        });
+
+
+    if (error) {
+
+        document.getElementById("mensaje").innerText =
+            "Error: " + error.message;
+
+        return;
+    }
+
+
+    document.getElementById("mensaje").innerText =
+        "✅ ¡Noticia publicada correctamente!";
+
+    document.getElementById("titulo").value = "";
+    document.getElementById("contenido").value = "";
+    document.getElementById("imagen").value = "";
+    document.getElementById("destacada").checked = false;
+
+    cargarNoticias();
+
+}
 
     const { data: urlImagen } =
         supabaseClient
@@ -335,6 +427,7 @@ if (archivo) {
 }
 
 
+
 // CARGAR NOTICIAS
 
 async function cargarNoticias() {
@@ -345,20 +438,15 @@ async function cargarNoticias() {
         .select("*")
         .order("fecha", { ascending: false });
 
-
     if (error) {
-
         console.error(error);
-
         return;
     }
-
 
     const lista =
         document.getElementById("listaNoticias");
 
     lista.innerHTML = "";
-
 
     data.forEach(noticia => {
 
@@ -371,7 +459,34 @@ async function cargarNoticias() {
 
             <h3>${noticia.titulo}</h3>
 
-            <p>${noticia.categoria || ""}</p>
+            <p>
+                <strong>Categoría:</strong>
+                ${noticia.categoria || "GENERAL"}
+            </p>
+
+            ${
+                noticia.destacada
+                ? "<p>⭐ NOTICIA DESTACADA</p>"
+                : ""
+            }
+
+            <button onclick="editarNoticia(${noticia.id})">
+                ✏️ Editar
+            </button>
+
+            <button onclick="cambiarDestacada(${noticia.id}, ${noticia.destacada})">
+                ${
+                    noticia.destacada
+                    ? "☆ Quitar destaque"
+                    : "⭐ Destacar"
+                }
+            </button>
+
+            <button
+                onclick="eliminarNoticia(${noticia.id})"
+                style="background:#333;">
+                🗑️ Eliminar
+            </button>
 
         `;
 
@@ -381,6 +496,99 @@ async function cargarNoticias() {
 
 }
 
+
+// DESTACAR / QUITAR DESTACADA
+
+async function cambiarDestacada(id, actualmenteDestacada) {
+
+    if (!actualmenteDestacada) {
+
+        await supabaseClient
+        .from("noticias")
+        .update({ destacada: false })
+        .eq("destacada", true);
+
+    }
+
+    const { error } =
+        await supabaseClient
+        .from("noticias")
+        .update({
+            destacada: !actualmenteDestacada
+        })
+        .eq("id", id);
+
+    if (error) {
+        alert("Error: " + error.message);
+        return;
+    }
+
+    cargarNoticias();
+}
+
+
+// ELIMINAR NOTICIA
+
+async function eliminarNoticia(id) {
+
+    if (!confirm("¿Seguro que querés eliminar esta noticia?")) {
+        return;
+    }
+
+    const { error } =
+        await supabaseClient
+        .from("noticias")
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+        alert("Error: " + error.message);
+        return;
+    }
+
+    cargarNoticias();
+}
+
+
+// EDITAR NOTICIA
+
+async function editarNoticia(id) {
+
+    const { data, error } =
+        await supabaseClient
+        .from("noticias")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+    if (error) {
+        alert("Error: " + error.message);
+        return;
+    }
+
+    document.getElementById("titulo").value =
+        data.titulo || "";
+
+    document.getElementById("contenido").value =
+        data.contenido || "";
+
+    document.getElementById("categoria").value =
+        data.categoria || "GENERAL";
+
+    document.getElementById("destacada").checked =
+        data.destacada || false;
+
+    window.noticiaEditando = id;
+
+    document.getElementById("mensaje").innerText =
+        "✏️ Estás editando esta noticia. Modificá los datos y guardá los cambios.";
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
 
 // CERRAR SESIÓN
 
