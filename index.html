@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -151,7 +152,7 @@ header {
 }
 
 /* =========================
-   PANEL ADMINISTRADOR
+   PANEL ADMIN
 ========================= */
 
 .panel-admin {
@@ -621,9 +622,7 @@ footer {
 <div class="barra"></div>
 
 
-<!-- =========================
-     MENÚ LATERAL
-========================= -->
+<!-- MENÚ -->
 
 <div class="menu-lateral" id="menuLateral">
 
@@ -648,9 +647,7 @@ footer {
 </div>
 
 
-<!-- =========================
-     LOGIN
-========================= -->
+<!-- LOGIN -->
 
 <div class="login-admin" id="loginAdmin">
 
@@ -666,12 +663,14 @@ footer {
         <input
             type="email"
             id="email"
-            placeholder="Email">
+            placeholder="Email"
+            autocomplete="username">
 
         <input
             type="password"
             id="password"
-            placeholder="Contraseña">
+            placeholder="Contraseña"
+            autocomplete="current-password">
 
         <button onclick="iniciarSesion()">
             Ingresar
@@ -690,9 +689,7 @@ footer {
 </div>
 
 
-<!-- =========================
-     PANEL ADMIN
-========================= -->
+<!-- PANEL ADMIN -->
 
 <div class="panel-admin" id="panelAdmin">
 
@@ -772,18 +769,13 @@ footer {
 </div>
 
 
-<!-- =========================
-     CONTENIDO
-========================= -->
+<!-- CONTENIDO -->
 
 <div class="contenedor">
 
     <div class="ultima">
         ÚLTIMAS NOTICIAS
     </div>
-
-
-    <!-- DESTACADA -->
 
     <div
         class="principal"
@@ -954,13 +946,20 @@ function cerrarLogin() {
 
 }
 
+
 async function iniciarSesion() {
 
     const email =
-        document.getElementById("email").value.trim();
+        document
+            .getElementById("email")
+            .value
+            .trim();
 
     const password =
-        document.getElementById("password").value;
+        document
+            .getElementById("password")
+            .value;
+
 
     if (!email || !password) {
 
@@ -972,13 +971,17 @@ async function iniciarSesion() {
         return;
     }
 
-    const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
 
-            email: email,
-            password: password
+    const { error } =
+        await supabaseClient
+            .auth
+            .signInWithPassword({
 
-        });
+                email: email,
+                password: password
+
+            });
+
 
     if (error) {
 
@@ -990,16 +993,20 @@ async function iniciarSesion() {
         return;
     }
 
+
     usuarioAdmin = true;
+
 
     document
         .body
         .classList
         .add("modo-admin");
 
+
     document
         .getElementById("adminBtn")
         .style.display = "block";
+
 
     cerrarLogin();
 
@@ -1018,23 +1025,36 @@ async function iniciarSesion() {
 
 async function comprobarSesion() {
 
-    const { data } =
-        await supabaseClient.auth.getSession();
+    /*
+       IMPORTANTE:
 
-    if (data && data.session) {
+       No iniciar automáticamente el modo administrador.
 
-        usuarioAdmin = true;
+       Aunque Supabase tenga una sesión guardada,
+       la página comienza como visitante.
 
-        document
-            .body
-            .classList
-            .add("modo-admin");
+       Para administrar se debe ingresar
+       nuevamente desde el botón Admin.
+    */
 
-        document
-            .getElementById("adminBtn")
-            .style.display = "block";
+    usuarioAdmin = false;
 
-    }
+
+    document
+        .body
+        .classList
+        .remove("modo-admin");
+
+
+    document
+        .getElementById("adminBtn")
+        .style.display = "none";
+
+
+    document
+        .getElementById("panelAdmin")
+        .classList
+        .remove("visible");
 
 }
 
@@ -1052,42 +1072,58 @@ function abrirPanelAdmin() {
         return;
     }
 
+
     document
         .getElementById("panelAdmin")
         .classList
         .add("visible");
 
+
     window.scrollTo({
+
         top: 0,
+
         behavior: "smooth"
+
     });
 
 }
 
+
+/* =========================
+   CANCELAR EDICIÓN
+========================= */
+
 function cancelarEdicion() {
 
     noticiaEditando = null;
+
 
     document
         .getElementById("adminTitulo")
         .innerText =
         "⚙️ Modo administrador";
 
+
     document
         .getElementById("titulo")
         .value = "";
+
 
     document
         .getElementById("contenido")
         .value = "";
 
+
     document
         .getElementById("imagen")
         .value = "";
 
+
     document
         .getElementById("destacada")
         .checked = false;
+
 
     document
         .getElementById("mensajeAdmin")
@@ -1109,11 +1145,13 @@ async function guardarNoticia() {
         return;
     }
 
+
     const titulo =
         document
             .getElementById("titulo")
             .value
             .trim();
+
 
     const contenido =
         document
@@ -1121,15 +1159,18 @@ async function guardarNoticia() {
             .value
             .trim();
 
+
     const categoria =
         document
             .getElementById("categoria")
             .value;
 
+
     const archivo =
         document
             .getElementById("imagen")
             .files[0];
+
 
     const destacada =
         document
@@ -1164,15 +1205,16 @@ async function guardarNoticia() {
         };
 
 
-        /* NUEVA IMAGEN */
-
         if (archivo) {
 
             const nombreArchivo =
                 Date.now() + "_" +
                 archivo.name;
 
-            const { error: errorSubida } =
+
+            const {
+                error: errorSubida
+            } =
                 await supabaseClient
                     .storage
                     .from("noticias")
@@ -1180,6 +1222,7 @@ async function guardarNoticia() {
                         nombreArchivo,
                         archivo
                     );
+
 
             if (errorSubida) {
 
@@ -1192,7 +1235,10 @@ async function guardarNoticia() {
                 return;
             }
 
-            const { data: urlImagen } =
+
+            const {
+                data: urlImagen
+            } =
                 supabaseClient
                     .storage
                     .from("noticias")
@@ -1200,13 +1246,12 @@ async function guardarNoticia() {
                         nombreArchivo
                     );
 
+
             datosActualizar.imagen =
                 urlImagen.publicUrl;
 
         }
 
-
-        /* SI DESTACA, QUITAR OTRAS */
 
         if (destacada) {
 
@@ -1215,7 +1260,10 @@ async function guardarNoticia() {
                 .update({
                     destacada: false
                 })
-                .eq("destacada", true);
+                .eq(
+                    "destacada",
+                    true
+                );
 
         }
 
@@ -1247,6 +1295,7 @@ async function guardarNoticia() {
             .innerText =
             "✅ Noticia actualizada correctamente.";
 
+
         cancelarEdicion();
 
         cargarNoticias();
@@ -1254,6 +1303,7 @@ async function guardarNoticia() {
         cargarNoticiaDestacada();
 
         return;
+
     }
 
 
@@ -1271,7 +1321,9 @@ async function guardarNoticia() {
             archivo.name;
 
 
-        const { error: errorSubida } =
+        const {
+            error: errorSubida
+        } =
             await supabaseClient
                 .storage
                 .from("noticias")
@@ -1293,7 +1345,9 @@ async function guardarNoticia() {
         }
 
 
-        const { data: urlImagen } =
+        const {
+            data: urlImagen
+        } =
             supabaseClient
                 .storage
                 .from("noticias")
@@ -1308,8 +1362,6 @@ async function guardarNoticia() {
     }
 
 
-    /* QUITAR DESTACADA ANTERIOR */
-
     if (destacada) {
 
         await supabaseClient
@@ -1317,7 +1369,10 @@ async function guardarNoticia() {
             .update({
                 destacada: false
             })
-            .eq("destacada", true);
+            .eq(
+                "destacada",
+                true
+            );
 
     }
 
@@ -1368,7 +1423,10 @@ async function guardarNoticia() {
 
 async function cargarNoticias() {
 
-    const { data, error } =
+    const {
+        data,
+        error
+    } =
         await supabaseClient
             .from("noticias")
             .select("*")
@@ -1380,6 +1438,13 @@ async function cargarNoticias() {
             );
 
 
+    const contenedor =
+        document
+            .getElementById(
+                "contenedorNoticias"
+            );
+
+
     if (error) {
 
         console.error(
@@ -1387,15 +1452,11 @@ async function cargarNoticias() {
             error
         );
 
+        contenedor.innerHTML =
+            "<p>❌ Error cargando noticias.</p>";
+
         return;
     }
-
-
-    const contenedor =
-        document
-            .getElementById(
-                "contenedorNoticias"
-            );
 
 
     contenedor.innerHTML = "";
@@ -1414,6 +1475,7 @@ async function cargarNoticias() {
 
         const articulo =
             document.createElement("div");
+
 
         articulo.className =
             "noticia";
@@ -1455,26 +1517,25 @@ async function cargarNoticias() {
                 </h3>
 
 
-                <div>
+                ${
+                    noticia.contenido
 
-                    ${
-                        noticia.contenido
-                        ?
-                        noticia.contenido
-                            .split(/\n\s*\n/)
-                            .slice(0,1)
-                            .map(
-                                parrafo =>
-                                `<p>
-                                    ${parrafo.trim()}
-                                </p>`
-                            )
-                            .join("")
-                        :
-                        ""
-                    }
+                    ?
 
-                </div>
+                    `<p>
+                        ${
+                            noticia.contenido
+                                .split(/\n\s*\n/)
+                                .slice(0,1)
+                                .join("")
+                                .trim()
+                        }
+                    </p>`
+
+                    :
+
+                    ""
+                }
 
 
                 <span class="boton">
@@ -1488,13 +1549,25 @@ async function cargarNoticias() {
 
                 <button
                     class="btn-editar"
-                    onclick="editarNoticia(event, ${noticia.id})">
+                    onclick="
+                        editarNoticia(
+                            event,
+                            ${noticia.id}
+                        )
+                    ">
                     ✏️ Editar
                 </button>
 
+
                 <button
                     class="btn-destacar"
-                    onclick="cambiarDestacada(event, ${noticia.id}, ${noticia.destacada})">
+                    onclick="
+                        cambiarDestacada(
+                            event,
+                            ${noticia.id},
+                            ${noticia.destacada}
+                        )
+                    ">
 
                     ${
                         noticia.destacada
@@ -1506,9 +1579,15 @@ async function cargarNoticias() {
 
                 </button>
 
+
                 <button
                     class="btn-eliminar"
-                    onclick="eliminarNoticia(event, ${noticia.id})">
+                    onclick="
+                        eliminarNoticia(
+                            event,
+                            ${noticia.id}
+                        )
+                    ">
                     🗑️ Eliminar
                 </button>
 
@@ -1532,11 +1611,17 @@ async function cargarNoticias() {
 
 async function cargarNoticiaDestacada() {
 
-    const { data, error } =
+    const {
+        data,
+        error
+    } =
         await supabaseClient
             .from("noticias")
             .select("*")
-            .eq("destacada", true)
+            .eq(
+                "destacada",
+                true
+            )
             .order(
                 "fecha",
                 {
@@ -1633,26 +1718,26 @@ async function cargarNoticiaDestacada() {
             </h1>
 
 
-            <div>
+            ${
+                noticia.contenido
 
-                ${
-                    noticia.contenido
-                    ?
-                    noticia.contenido
-                        .split(/\n\s*\n/)
-                        .slice(0,2)
-                        .map(
-                            parrafo =>
-                            `<p>
-                                ${parrafo.trim()}
-                            </p>`
-                        )
-                        .join("")
-                    :
-                    ""
-                }
+                ?
 
-            </div>
+                noticia.contenido
+                    .split(/\n\s*\n/)
+                    .slice(0,2)
+                    .map(
+                        parrafo =>
+                        `<p>
+                            ${parrafo.trim()}
+                        </p>`
+                    )
+                    .join("")
+
+                :
+
+                ""
+            }
 
 
             <span class="boton">
@@ -1664,19 +1749,37 @@ async function cargarNoticiaDestacada() {
 
                 <button
                     class="btn-editar"
-                    onclick="editarNoticia(event, ${noticia.id})">
+                    onclick="
+                        editarNoticia(
+                            event,
+                            ${noticia.id}
+                        )
+                    ">
                     ✏️ Editar
                 </button>
 
+
                 <button
                     class="btn-destacar"
-                    onclick="cambiarDestacada(event, ${noticia.id}, true)">
+                    onclick="
+                        cambiarDestacada(
+                            event,
+                            ${noticia.id},
+                            true
+                        )
+                    ">
                     ☆ Quitar destaque
                 </button>
 
+
                 <button
                     class="btn-eliminar"
-                    onclick="eliminarNoticia(event, ${noticia.id})">
+                    onclick="
+                        eliminarNoticia(
+                            event,
+                            ${noticia.id}
+                        )
+                    ">
                     🗑️ Eliminar
                 </button>
 
@@ -1697,6 +1800,7 @@ async function editarNoticia(event, id) {
 
     event.stopPropagation();
 
+
     if (!usuarioAdmin) {
 
         abrirLogin();
@@ -1705,11 +1809,17 @@ async function editarNoticia(event, id) {
     }
 
 
-    const { data, error } =
+    const {
+        data,
+        error
+    } =
         await supabaseClient
             .from("noticias")
             .select("*")
-            .eq("id", id)
+            .eq(
+                "id",
+                id
+            )
             .single();
 
 
@@ -1724,7 +1834,8 @@ async function editarNoticia(event, id) {
     }
 
 
-    noticiaEditando = id;
+    noticiaEditando =
+        id;
 
 
     document
@@ -1804,7 +1915,9 @@ async function cambiarDestacada(
     }
 
 
-    const { error } =
+    const {
+        error
+    } =
         await supabaseClient
             .from("noticias")
             .update({
@@ -1867,7 +1980,9 @@ async function eliminarNoticia(
     }
 
 
-    const { error } =
+    const {
+        error
+    } =
         await supabaseClient
             .from("noticias")
             .delete()
@@ -1937,6 +2052,12 @@ async function cerrarSesion() {
    INICIO
 ========================= */
 
+/*
+   IMPORTANTE:
+   Primero comprobamos el estado visual
+   y luego cargamos las noticias públicas.
+*/
+
 comprobarSesion();
 
 cargarNoticias();
@@ -1947,3 +2068,4 @@ cargarNoticiaDestacada();
 
 </body>
 </html>
+```
