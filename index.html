@@ -2,6 +2,7 @@
 <html lang="es">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -61,8 +62,6 @@ header {
     margin-top: 4px;
 }
 
-/* BOTÓN MENÚ */
-
 .menu-btn {
     background: #e30613;
     color: white;
@@ -71,10 +70,6 @@ header {
     border-radius: 6px;
     font-size: 22px;
     cursor: pointer;
-}
-
-.menu-btn:hover {
-    background: #b9000c;
 }
 
 /* BARRA */
@@ -121,7 +116,6 @@ header {
 
 .menu-lateral a:hover {
     background: #e30613;
-    padding-left: 12px;
 }
 
 .cerrar-menu {
@@ -143,7 +137,7 @@ header {
     padding: 20px 15px;
 }
 
-/* ÚLTIMAS NOTICIAS */
+/* ÚLTIMAS */
 
 .ultima {
     background: #e30613;
@@ -196,7 +190,7 @@ header {
     line-height: 1.6;
 }
 
-/* TÍTULOS */
+/* TITULOS */
 
 .seccion-titulo {
     border-left: 6px solid #e30613;
@@ -304,6 +298,16 @@ header {
     font-weight: bold;
 }
 
+/* ERROR */
+
+.error-supabase {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    color: #b00000;
+}
+
 /* FOOTER */
 
 footer {
@@ -317,14 +321,6 @@ footer {
 /* CELULAR */
 
 @media (max-width: 800px) {
-
-    header {
-        padding: 15px;
-    }
-
-    .logo-area {
-        gap: 12px;
-    }
 
     .logo-area img {
         width: 85px;
@@ -373,8 +369,10 @@ footer {
 
         <div class="logo-area">
 
-            <img src="./logo.jpg"
-                 alt="12 + 12 Noticias de Tigre">
+            <img
+                src="./logo.jpg"
+                alt="12 + 12 Noticias de Tigre"
+            >
 
             <div>
 
@@ -390,7 +388,9 @@ footer {
 
         </div>
 
-        <button class="menu-btn" onclick="abrirMenu()">
+        <button
+            class="menu-btn"
+            onclick="abrirMenu()">
             ☰
         </button>
 
@@ -401,25 +401,57 @@ footer {
 <div class="barra"></div>
 
 
-<!-- MENÚ LATERAL -->
+<!-- MENÚ -->
 
-<div class="menu-lateral" id="menuLateral">
+<div
+    class="menu-lateral"
+    id="menuLateral">
 
-    <button class="cerrar-menu" onclick="cerrarMenu()">
+    <button
+        class="cerrar-menu"
+        onclick="cerrarMenu()">
         ✕
     </button>
 
-    <h2>Secciones</h2>
+    <h2>
+        Secciones
+    </h2>
 
-    <a href="./index.html">INICIO</a>
-    <a href="./index.html">TIGRE</a>
-    <a href="./index.html">POLICIALES</a>
-    <a href="./index.html">INFORMACIÓN VECINAL</a>
-    <a href="./index.html">POLÍTICA</a>
-    <a href="./index.html">DEPORTES</a>
-    <a href="./index.html">OBRAS Y SERVICIOS</a>
-    <a href="./index.html">SOCIEDAD</a>
-    <a href="./index.html">GENERAL</a>
+    <a href="./index.html">
+        INICIO
+    </a>
+
+    <a href="./index.html">
+        TIGRE
+    </a>
+
+    <a href="./index.html">
+        POLICIALES
+    </a>
+
+    <a href="./index.html">
+        INFORMACIÓN VECINAL
+    </a>
+
+    <a href="./index.html">
+        POLÍTICA
+    </a>
+
+    <a href="./index.html">
+        DEPORTES
+    </a>
+
+    <a href="./index.html">
+        OBRAS Y SERVICIOS
+    </a>
+
+    <a href="./index.html">
+        SOCIEDAD
+    </a>
+
+    <a href="./index.html">
+        GENERAL
+    </a>
 
 </div>
 
@@ -431,9 +463,11 @@ footer {
     </div>
 
 
-    <!-- NOTICIA DESTACADA -->
+    <!-- DESTACADA -->
 
-    <div class="principal" id="noticiaDestacada">
+    <div
+        class="principal"
+        id="noticiaDestacada">
 
         <div class="imagen">
             Cargando noticia destacada...
@@ -459,7 +493,15 @@ footer {
     </h2>
 
 
-    <div class="noticias" id="contenedorNoticias"></div>
+    <div
+        class="noticias"
+        id="contenedorNoticias">
+
+        <div class="error-supabase">
+            Cargando noticias...
+        </div>
+
+    </div>
 
 
     <h2 class="seccion-titulo">
@@ -469,14 +511,37 @@ footer {
 
     <div class="categorias">
 
-        <div class="categoria">TIGRE</div>
-        <div class="categoria">POLICIALES</div>
-        <div class="categoria">INFORMACIÓN VECINAL</div>
-        <div class="categoria">POLÍTICA</div>
-        <div class="categoria">DEPORTES</div>
-        <div class="categoria">OBRAS Y SERVICIOS</div>
-        <div class="categoria">SOCIEDAD</div>
-        <div class="categoria">GENERAL</div>
+        <div class="categoria">
+            TIGRE
+        </div>
+
+        <div class="categoria">
+            POLICIALES
+        </div>
+
+        <div class="categoria">
+            INFORMACIÓN VECINAL
+        </div>
+
+        <div class="categoria">
+            POLÍTICA
+        </div>
+
+        <div class="categoria">
+            DEPORTES
+        </div>
+
+        <div class="categoria">
+            OBRAS Y SERVICIOS
+        </div>
+
+        <div class="categoria">
+            SOCIEDAD
+        </div>
+
+        <div class="categoria">
+            GENERAL
+        </div>
 
     </div>
 
@@ -572,13 +637,20 @@ function abrirNoticia(id) {
 
 }
 
+
 /* =========================
    CARGAR NOTICIAS
 ========================= */
 
 async function cargarNoticias() {
 
-    const { data, error } =
+    const contenedor =
+        document.getElementById(
+            "contenedorNoticias"
+        );
+
+
+    const resultado =
         await supabaseClient
         .from("noticias")
         .select("*")
@@ -587,21 +659,65 @@ async function cargarNoticias() {
         });
 
 
+    const data =
+        resultado.data;
+
+    const error =
+        resultado.error;
+
+
     if (error) {
 
         console.error(
-            "Error cargando noticias:",
+            "ERROR SUPABASE:",
             error
         );
+
+
+        contenedor.innerHTML = `
+
+            <div class="error-supabase">
+
+                <h2>
+                    No se pudieron cargar las noticias
+                </h2>
+
+                <p>
+                    Error de conexión con la base de datos.
+                </p>
+
+                <p>
+                    ${error.message}
+                </p>
+
+            </div>
+
+        `;
 
         return;
     }
 
 
-    const contenedor =
-        document.getElementById(
-            "contenedorNoticias"
-        );
+    if (!data || data.length === 0) {
+
+        contenedor.innerHTML = `
+
+            <div class="error-supabase">
+
+                <h2>
+                    No hay noticias
+                </h2>
+
+                <p>
+                    Supabase no devolvió ninguna noticia.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
 
 
     contenedor.innerHTML = "";
@@ -617,35 +733,60 @@ async function cargarNoticias() {
             "noticia";
 
 
-        articulo.onclick = function() {
+        articulo.onclick =
+            function() {
 
-            abrirNoticia(noticia.id);
+                abrirNoticia(
+                    noticia.id
+                );
 
-        };
+            };
+
+
+        let imagenHTML = "";
+
+
+        if (noticia.imagen) {
+
+            imagenHTML = `
+
+                <img
+                    src="${noticia.imagen}"
+                    alt="${noticia.titulo}"
+                >
+
+            `;
+
+        } else {
+
+            imagenHTML = `
+
+                <div class="foto">
+                    NOTICIA
+                </div>
+
+            `;
+
+        }
+
+
+        let resumen = "";
+
+
+        if (noticia.contenido) {
+
+            resumen =
+                noticia.contenido
+                .split(/\n\s*\n/)
+                [0]
+                .trim();
+
+        }
 
 
         articulo.innerHTML = `
 
-            ${
-                noticia.imagen
-
-                ?
-
-                \`
-                <img
-                    src="${noticia.imagen}"
-                    alt="${noticia.titulo}">
-                \`
-
-                :
-
-                \`
-                <div class="foto">
-                    NOTICIA
-                </div>
-                \`
-            }
-
+            ${imagenHTML}
 
             <div class="texto">
 
@@ -653,30 +794,9 @@ async function cargarNoticias() {
                     ${noticia.titulo}
                 </h3>
 
-
-                <div class="contenido-noticia">
-
-                    ${
-                        noticia.contenido
-
-                        ?
-
-                        noticia.contenido
-                        .split(/\\n\\s*\\n/)
-                        .slice(0,1)
-                        .map(
-                            parrafo =>
-                            \`<p>${parrafo.trim()}</p>\`
-                        )
-                        .join("")
-
-                        :
-
-                        ""
-                    }
-
-                </div>
-
+                <p>
+                    ${resumen}
+                </p>
 
                 <span class="boton">
                     ${noticia.categoria || "GENERAL"}
@@ -697,12 +817,18 @@ async function cargarNoticias() {
 
 
 /* =========================
-   NOTICIA DESTACADA
+   DESTACADA
 ========================= */
 
 async function cargarNoticiaDestacada() {
 
-    const { data, error } =
+    const contenedor =
+        document.getElementById(
+            "noticiaDestacada"
+        );
+
+
+    const resultado =
         await supabaseClient
         .from("noticias")
         .select("*")
@@ -713,21 +839,38 @@ async function cargarNoticiaDestacada() {
         .limit(1);
 
 
+    const data =
+        resultado.data;
+
+    const error =
+        resultado.error;
+
+
     if (error) {
 
         console.error(
-            "Error cargando noticia destacada:",
+            "ERROR DESTACADA:",
             error
         );
 
+        contenedor.innerHTML = `
+
+            <div class="error-supabase">
+
+                <h2>
+                    Error cargando noticia destacada
+                </h2>
+
+                <p>
+                    ${error.message}
+                </p>
+
+            </div>
+
+        `;
+
         return;
     }
-
-
-    const contenedor =
-        document.getElementById(
-            "noticiaDestacada"
-        );
 
 
     if (!data || data.length === 0) {
@@ -745,8 +888,8 @@ async function cargarNoticiaDestacada() {
                 </h1>
 
                 <p>
-                    Próximamente vas a encontrar
-                    aquí nuestra noticia destacada.
+                    Todavía no seleccionaste una
+                    noticia destacada.
                 </p>
 
             </div>
@@ -757,35 +900,65 @@ async function cargarNoticiaDestacada() {
     }
 
 
-    const noticia = data[0];
+    const noticia =
+        data[0];
 
 
-    contenedor.onclick = function() {
+    contenedor.onclick =
+        function() {
 
-        abrirNoticia(noticia.id);
+            abrirNoticia(
+                noticia.id
+            );
 
-    };
+        };
+
+
+    let imagenHTML = "";
+
+
+    if (noticia.imagen) {
+
+        imagenHTML = `
+
+            <img
+                src="${noticia.imagen}"
+                alt="${noticia.titulo}"
+            >
+
+        `;
+
+    } else {
+
+        imagenHTML =
+            "NOTICIA DESTACADA";
+
+    }
+
+
+    let contenido = "";
+
+
+    if (noticia.contenido) {
+
+        contenido =
+            noticia.contenido
+            .split(/\n\s*\n/)
+            .slice(0,2)
+            .map(
+                parrafo =>
+                `<p>${parrafo.trim()}</p>`
+            )
+            .join("");
+
+    }
 
 
     contenedor.innerHTML = `
 
         <div class="imagen">
 
-            ${
-                noticia.imagen
-
-                ?
-
-                \`
-                <img
-                    src="${noticia.imagen}"
-                    alt="${noticia.titulo}">
-                \`
-
-                :
-
-                "NOTICIA DESTACADA"
-            }
+            ${imagenHTML}
 
         </div>
 
@@ -796,30 +969,7 @@ async function cargarNoticiaDestacada() {
                 ${noticia.titulo}
             </h1>
 
-
-            <div class="contenido-noticia">
-
-                ${
-                    noticia.contenido
-
-                    ?
-
-                    noticia.contenido
-                    .split(/\\n\\s*\\n/)
-                    .slice(0,2)
-                    .map(
-                        parrafo =>
-                        \`<p>${parrafo.trim()}</p>\`
-                    )
-                    .join("")
-
-                    :
-
-                    ""
-                }
-
-            </div>
-
+            ${contenido}
 
             <span class="boton">
                 ${noticia.categoria || "GENERAL"}
