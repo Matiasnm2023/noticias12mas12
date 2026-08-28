@@ -162,7 +162,9 @@ nav a:hover {
 }
 
 .noticia p {
-    line-height: 1.5;
+    line-height: 1.6;
+    margin: 0 0 18px;
+    text-align: justify;
 }
 
 .categorias {
@@ -405,9 +407,15 @@ async function cargarNoticias() {
 
                 <h3>${noticia.titulo}</h3>
 
-                <p>
-                    ${noticia.contenido || ""}
-                </p>
+               <div class="contenido-noticia">
+    ${noticia.contenido
+        ? noticia.contenido
+            .split(/\n\s*\n/)
+            .map(parrafo => `<p>${parrafo.trim()}</p>`)
+            .join("")
+        : ""
+    }
+</div>
 
                 <span class="boton">
                     ${noticia.categoria || "GENERAL"}
