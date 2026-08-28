@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Administración - 12 + 12 Noticias</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f1f3f5;
+    color: #222;
+}
+
+header {
+    background: #111;
+    color: white;
+    text-align: center;
+    padding: 25px 15px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 30px;
+}
+
+header p {
+    color: #ccc;
+}
+
+.contenedor {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+.panel {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+h2 {
+    margin-top: 0;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 18px;
+    margin-bottom: 6px;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+textarea {
+    min-height: 180px;
+    resize: vertical;
+}
+
+button {
+    border: 0;
+    background: #e30613;
+    color: white;
+    padding: 12px 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #b9000c;
+}
+
+#mensaje {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+#panelAdmin {
+    display: none;
+}
+
+#login {
+    max-width: 500px;
+    margin: 40px auto;
+}
+
+.noticia {
+    border-top: 1px solid #ddd;
+    padding: 18px 0;
+}
+
+.noticia h3 {
+    margin: 0 0 8px;
+}
+
+.salida {
+    background: #333;
+    margin-left: 10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>12 + 12 Noticias de Tigre</h1>
+    <p>Panel de administración</p>
+</header>
+
+<div class="contenedor">
+
+    <!-- LOGIN -->
+
+    <div class="panel" id="login">
+
+        <h2>Ingresar</h2>
+
+        <label>Email</label>
+        <input type="email" id="email">
+
+        <label>Contraseña</label>
+        <input type="password" id="password">
+
+        <button onclick="iniciarSesion()">Ingresar</button>
+
+        <div id="mensajeLogin"></div>
+
+    </div>
+
+
+    <!-- PANEL -->
+
+    <div class="panel" id="panelAdmin">
+
+        <h2>Nueva noticia</h2>
+
+        <label>Título</label>
+        <input type="text" id="titulo">
+
+        <label>Contenido</label>
+        <textarea id="contenido"></textarea>
+
+        <label>Categoría</label>
+
+        <select id="categoria">
+
+            <option value="TIGRE">TIGRE</option>
+            <option value="POLICIALES">POLICIALES</option>
+            <option value="INFORMACIÓN VECINAL">INFORMACIÓN VECINAL</option>
+            <option value="POLÍTICA">POLÍTICA</option>
+            <option value="DEPORTES">DEPORTES</option>
+            <option value="OBRAS Y SERVICIOS">OBRAS Y SERVICIOS</option>
+            <option value="SOCIEDAD">SOCIEDAD</option>
+            <option value="GENERAL">GENERAL</option>
+
+        </select>
+
+        <label>Imagen</label>
+        <input type="text" id="imagen" placeholder="URL de la imagen">
+
+        <label>
+            <input type="checkbox" id="destacada">
+            Noticia destacada
+        </label>
+
+        <button onclick="publicarNoticia()">Publicar noticia</button>
+
+        <button class="salida" onclick="cerrarSesion()">Cerrar sesión</button>
+
+        <div id="mensaje"></div>
+
+        <h2 style="margin-top:40px;">Noticias publicadas</h2>
+
+        <div id="listaNoticias"></div>
+
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL = "https://piyabciajfhlarvecdvu.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK"
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+// INICIAR SESIÓN
+
+async function iniciarSesion() {
+
+    const email = document.getElementById("email").value;
+
+    const password = document.getElementById("password").value;
+
+    const { data, error } =
+        await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+    if (error) {
+
+        document.getElementById("mensajeLogin").innerText =
+            "Error: " + error.message;
+
+        return;
+    }
+
+    document.getElementById("login").style.display = "none";
+
+    document.getElementById("panelAdmin").style.display = "block";
+
+    cargarNoticias();
+
+}
+
+
+// PUBLICAR NOTICIA
+
+async function publicarNoticia() {
+
+    const titulo =
+        document.getElementById("titulo").value;
+
+    const contenido =
+        document.getElementById("contenido").value;
+
+    const categoria =
+        document.getElementById("categoria").value;
+
+    const imagen =
+        document.getElementById("imagen").value;
+
+    const destacada =
+        document.getElementById("destacada").checked;
+
+
+    const { error } =
+        await supabaseClient
+        .from("noticias")
+        .insert({
+
+            titulo: titulo,
+
+            contenido: contenido,
+
+            categoria: categoria,
+
+            imagen: imagen,
+
+            destacada: destacada
+
+        });
+
+
+    if (error) {
+
+        document.getElementById("mensaje").innerText =
+            "Error: " + error.message;
+
+        return;
+    }
+
+
+    document.getElementById("mensaje").innerText =
+        "¡Noticia publicada correctamente!";
+
+
+    document.getElementById("titulo").value = "";
+
+    document.getElementById("contenido").value = "";
+
+    document.getElementById("imagen").value = "";
+
+    document.getElementById("destacada").checked = false;
+
+
+    cargarNoticias();
+
+}
+
+
+// CARGAR NOTICIAS
+
+async function cargarNoticias() {
+
+    const { data, error } =
+        await supabaseClient
+        .from("noticias")
+        .select("*")
+        .order("fecha", { ascending: false });
+
+
+    if (error) {
+
+        console.error(error);
+
+        return;
+    }
+
+
+    const lista =
+        document.getElementById("listaNoticias");
+
+    lista.innerHTML = "";
+
+
+    data.forEach(noticia => {
+
+        const div =
+            document.createElement("div");
+
+        div.className = "noticia";
+
+        div.innerHTML = `
+
+            <h3>${noticia.titulo}</h3>
+
+            <p>${noticia.categoria || ""}</p>
+
+        `;
+
+        lista.appendChild(div);
+
+    });
+
+}
+
+
+// CERRAR SESIÓN
+
+async function cerrarSesion() {
+
+    await supabaseClient.auth.signOut();
+
+    location.reload();
+
+}
+
+</script>
+
+</body>
+</html>
