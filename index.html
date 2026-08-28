@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,30 +8,47 @@
 
 <style>
 
+/* =========================
+   GENERAL
+========================= */
+
 * {
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-    background: #f1f3f5;
-    color: #222;
+    background: #f3f4f6;
+    color: #171717;
+}
+
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
 }
 
 /* =========================
-   ENCABEZADO
+   HEADER
 ========================= */
 
 header {
     background: #111;
     color: white;
-    padding: 18px 20px;
+    border-bottom: 5px solid #e30613;
 }
 
 .encabezado {
-    max-width: 1150px;
+    max-width: 1200px;
     margin: auto;
+    min-height: 105px;
+    padding: 14px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -41,79 +57,77 @@ header {
 .logo-area {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 14px;
 }
 
 .logo-area img {
-    width: 125px;
-    height: 125px;
+    width: 78px;
+    height: 78px;
     object-fit: cover;
     border-radius: 50%;
+    border: 2px solid white;
 }
 
 .logo-texto {
-    font-size: 38px;
+    font-size: 34px;
     font-weight: 900;
-    letter-spacing: 2px;
+    line-height: 1;
+    letter-spacing: 1px;
 }
 
 .logo-subtitulo {
-    font-size: 18px;
     color: #ddd;
-    margin-top: 4px;
+    margin-top: 6px;
+    font-size: 16px;
 }
+
+/* =========================
+   BOTONES HEADER
+========================= */
 
 .botones-header {
     display: flex;
-    align-items: center;
     gap: 10px;
+    align-items: center;
 }
 
 .menu-btn,
 .admin-btn {
-    border: none;
+    border: 0;
     color: white;
-    padding: 12px 16px;
+    padding: 11px 15px;
     border-radius: 6px;
-    font-size: 20px;
-    cursor: pointer;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .menu-btn {
     background: #e30613;
+    font-size: 20px;
 }
 
 .admin-btn {
-    background: #444;
     display: none;
+    background: #333;
 }
 
 /* =========================
-   BARRA
-========================= */
-
-.barra {
-    height: 8px;
-    background: #e30613;
-}
-
-/* =========================
-   MENÚ LATERAL
+   MENU
 ========================= */
 
 .menu-lateral {
     position: fixed;
+    z-index: 3000;
     top: 0;
-    right: -320px;
-    width: 320px;
-    height: 100%;
+    right: -330px;
+    width: 330px;
+    max-width: 90%;
+    height: 100vh;
     background: #111;
     color: white;
-    z-index: 1000;
     padding: 25px;
-    transition: right 0.3s ease;
-    box-shadow: -3px 0 10px rgba(0,0,0,0.3);
+    transition: right .3s ease;
+    box-shadow: -5px 0 20px rgba(0,0,0,.35);
 }
 
 .menu-lateral.abierto {
@@ -121,7 +135,7 @@ header {
 }
 
 .menu-lateral h2 {
-    margin-top: 0;
+    margin-top: 45px;
     border-bottom: 1px solid #444;
     padding-bottom: 15px;
 }
@@ -130,7 +144,7 @@ header {
     display: block;
     color: white;
     text-decoration: none;
-    padding: 15px 5px;
+    padding: 14px 5px;
     border-bottom: 1px solid #333;
     font-weight: bold;
 }
@@ -141,14 +155,78 @@ header {
 }
 
 .cerrar-menu {
+    position: absolute;
+    right: 20px;
+    top: 20px;
     background: #e30613;
-    border: none;
+    border: 0;
     color: white;
     padding: 8px 12px;
     border-radius: 5px;
-    float: right;
     cursor: pointer;
     font-size: 18px;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-admin {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    background: rgba(0,0,0,.72);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-admin.visible {
+    display: flex;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 410px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,.35);
+}
+
+.login-box h2 {
+    margin-top: 0;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 13px;
+    margin: 7px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 9px;
+    border: 0;
+    border-radius: 6px;
+    background: #e30613;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.login-box .cancelar {
+    background: #444;
+}
+
+#mensajeLogin {
+    margin-top: 12px;
+    font-weight: bold;
 }
 
 /* =========================
@@ -157,26 +235,28 @@ header {
 
 .panel-admin {
     display: none;
-    max-width: 1150px;
+    max-width: 1200px;
     margin: 20px auto;
-    padding: 20px;
+    padding: 22px;
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     border-left: 6px solid #e30613;
+    border-radius: 8px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.12);
 }
 
 .panel-admin.visible {
     display: block;
 }
 
-.panel-admin h2 {
-    margin-top: 0;
+.admin-titulo {
+    font-size: 23px;
+    font-weight: bold;
 }
 
 .admin-form {
     display: grid;
     gap: 12px;
+    margin-top: 15px;
 }
 
 .admin-form input,
@@ -185,40 +265,36 @@ header {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 6px;
     font-size: 16px;
 }
 
 .admin-form textarea {
-    min-height: 160px;
+    min-height: 170px;
     resize: vertical;
 }
 
-.admin-form button {
-    border: none;
-    background: #e30613;
+.admin-botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.admin-botones button {
+    border: 0;
+    padding: 11px 15px;
+    border-radius: 6px;
     color: white;
-    padding: 12px 18px;
-    border-radius: 5px;
+    background: #e30613;
     font-weight: bold;
     cursor: pointer;
 }
 
-.admin-form button:hover {
-    background: #b9000c;
-}
-
-.admin-cancelar {
-    background: #555 !important;
+.admin-botones .gris {
+    background: #444;
 }
 
 #mensajeAdmin {
-    font-weight: bold;
-    margin-top: 5px;
-}
-
-#adminTitulo {
-    font-size: 22px;
     font-weight: bold;
 }
 
@@ -227,22 +303,30 @@ header {
 ========================= */
 
 .contenedor {
-    max-width: 1150px;
+    max-width: 1200px;
     margin: auto;
-    padding: 20px 15px;
+    padding: 22px 18px 40px;
 }
 
 /* =========================
-   ÚLTIMAS NOTICIAS
+   TITULOS
 ========================= */
 
 .ultima {
     background: #e30613;
     color: white;
-    padding: 11px 15px;
-    font-size: 20px;
-    font-weight: bold;
+    padding: 12px 16px;
+    font-weight: 900;
+    font-size: 19px;
+    border-radius: 5px;
     margin-bottom: 20px;
+}
+
+.seccion-titulo {
+    border-left: 6px solid #e30613;
+    padding-left: 12px;
+    margin: 35px 0 18px;
+    font-size: 27px;
 }
 
 /* =========================
@@ -251,53 +335,56 @@ header {
 
 .principal {
     background: white;
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    box-shadow: 0 3px 14px rgba(0,0,0,.13);
     cursor: pointer;
+    transition: transform .2s;
 }
 
-.principal .imagen {
-    height: 390px;
-    background: linear-gradient(135deg, #222, #555);
+.principal:hover {
+    transform: translateY(-2px);
+}
+
+.principal-imagen {
+    width: 100%;
+    height: 450px;
+    background: #222;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 24px;
     font-weight: bold;
+    font-size: 22px;
 }
 
-.principal .imagen img {
+.principal-imagen img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.principal .contenido {
-    padding: 22px;
+.principal-contenido {
+    padding: 25px;
+}
+
+.principal-categoria {
+    color: #e30613;
+    font-size: 14px;
+    font-weight: 900;
+    text-transform: uppercase;
 }
 
 .principal h1 {
-    font-size: 32px;
-    margin: 0 0 10px;
+    margin: 8px 0 12px;
+    font-size: 35px;
+    line-height: 1.12;
 }
 
 .principal p {
     font-size: 18px;
     line-height: 1.6;
-}
-
-/* =========================
-   TÍTULOS
-========================= */
-
-.seccion-titulo {
-    border-left: 6px solid #e30613;
-    padding-left: 12px;
-    font-size: 26px;
-    margin: 30px 0 18px;
+    margin: 0;
 }
 
 /* =========================
@@ -307,59 +394,58 @@ header {
 .noticias {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+    gap: 20px;
 }
 
 .noticia {
     background: white;
-    border-radius: 8px;
+    border-radius: 9px;
     overflow: hidden;
-    box-shadow: 0 2px 7px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 9px rgba(0,0,0,.10);
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: transform .2s, box-shadow .2s;
 }
 
 .noticia:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
+    box-shadow: 0 7px 18px rgba(0,0,0,.15);
 }
 
-.noticia img,
-.noticia .foto {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-}
-
-.noticia .foto {
-    background: #555;
+.noticia-imagen {
+    height: 190px;
+    background: #333;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.noticia .texto {
-    padding: 15px;
+.noticia-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.noticia-texto {
+    padding: 17px;
+}
+
+.noticia-categoria {
+    color: #e30613;
+    font-size: 13px;
+    font-weight: 900;
 }
 
 .noticia h3 {
-    margin-top: 0;
     font-size: 20px;
+    line-height: 1.25;
+    margin: 7px 0 10px;
 }
 
 .noticia p {
-    line-height: 1.6;
-    margin: 0 0 15px;
-    text-align: justify;
-}
-
-.boton {
-    display: inline-block;
-    background: #e30613;
-    color: white;
-    padding: 8px 13px;
-    border-radius: 5px;
-    font-weight: bold;
+    margin: 0;
+    line-height: 1.5;
+    color: #555;
 }
 
 /* =========================
@@ -369,21 +455,21 @@ header {
 .controles-admin {
     display: none;
     padding: 12px;
-    background: #f1f1f1;
+    background: #f2f2f2;
     border-top: 1px solid #ddd;
+    gap: 7px;
+    flex-wrap: wrap;
 }
 
 .modo-admin .controles-admin {
     display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
 }
 
 .controles-admin button {
-    border: none;
-    padding: 9px 12px;
-    border-radius: 5px;
+    border: 0;
     color: white;
+    padding: 8px 11px;
+    border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
 }
@@ -401,20 +487,19 @@ header {
 }
 
 /* =========================
-   SECCIONES
+   CATEGORIAS
 ========================= */
 
 .categorias {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
-    margin-top: 20px;
 }
 
 .categoria {
-    background: #111;
+    background: #151515;
     color: white;
-    padding: 18px;
+    padding: 17px 10px;
     text-align: center;
     font-weight: bold;
     border-radius: 6px;
@@ -425,83 +510,21 @@ header {
 ========================= */
 
 .redes {
-    text-align: center;
     background: white;
+    margin-top: 35px;
     padding: 25px;
-    margin-top: 30px;
-    border-radius: 8px;
+    border-radius: 9px;
+    text-align: center;
 }
 
 .redes a {
     display: inline-block;
-    margin: 5px;
-    padding: 10px 16px;
     background: #e30613;
     color: white;
     text-decoration: none;
+    padding: 10px 17px;
+    margin: 4px;
     border-radius: 5px;
-    font-weight: bold;
-}
-
-/* =========================
-   LOGIN
-========================= */
-
-.login-admin {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-    z-index: 2000;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.login-admin.visible {
-    display: flex;
-}
-
-.login-box {
-    width: 100%;
-    max-width: 420px;
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.3);
-}
-
-.login-box h2 {
-    margin-top: 0;
-}
-
-.login-box input {
-    width: 100%;
-    padding: 13px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-.login-box button {
-    width: 100%;
-    padding: 13px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    background: #e30613;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.btn-cerrar-login {
-    background: #555 !important;
-}
-
-#mensajeLogin {
-    margin-top: 12px;
     font-weight: bold;
 }
 
@@ -510,11 +533,11 @@ header {
 ========================= */
 
 footer {
-    margin-top: 40px;
     background: #111;
     color: white;
     text-align: center;
-    padding: 25px 15px;
+    padding: 28px 15px;
+    margin-top: 20px;
 }
 
 /* =========================
@@ -523,57 +546,174 @@ footer {
 
 @media (max-width: 800px) {
 
-    header {
-        padding: 15px;
+    .encabezado {
+        min-height: 78px;
+        padding: 10px 13px;
     }
 
     .logo-area {
-        gap: 12px;
+        gap: 9px;
     }
 
     .logo-area img {
-        width: 85px;
-        height: 85px;
+        width: 58px;
+        height: 58px;
     }
 
     .logo-texto {
-        font-size: 27px;
+        font-size: 25px;
     }
 
     .logo-subtitulo {
-        font-size: 15px;
+        font-size: 13px;
+        margin-top: 3px;
     }
 
-    .principal .imagen {
+    .menu-btn {
+        font-size: 18px;
+        padding: 9px 11px;
+    }
+
+    .admin-btn {
+        font-size: 13px;
+        padding: 9px 10px;
+    }
+
+    .contenedor {
+        padding: 15px 10px 30px;
+    }
+
+    .ultima {
+        font-size: 17px;
+        margin-bottom: 14px;
+    }
+
+    .principal {
+        border-radius: 7px;
+    }
+
+    .principal-imagen {
         height: 230px;
+    }
+
+    .principal-contenido {
+        padding: 17px;
     }
 
     .principal h1 {
         font-size: 25px;
     }
 
+    .principal p {
+        font-size: 16px;
+    }
+
+    .seccion-titulo {
+        font-size: 22px;
+        margin: 28px 0 15px;
+    }
+
     .noticias {
         grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .noticia {
+        display: grid;
+        grid-template-columns: 125px 1fr;
+        min-height: 125px;
+    }
+
+    .noticia-imagen {
+        height: 100%;
+        min-height: 125px;
+    }
+
+    .noticia-texto {
+        padding: 13px;
+    }
+
+    .noticia h3 {
+        font-size: 17px;
+        margin: 5px 0 7px;
+    }
+
+    .noticia p {
+        font-size: 14px;
+        line-height: 1.4;
     }
 
     .categorias {
         grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
     }
 
-    .menu-lateral {
-        width: 280px;
+    .categoria {
+        padding: 14px 7px;
+        font-size: 13px;
+    }
+
+    .panel-admin {
+        margin: 12px 10px;
+        padding: 17px;
+    }
+
+    .admin-botones {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .admin-botones button {
+        width: 100%;
+    }
+
+}
+
+/* =========================
+   CELULAR MUY PEQUEÑO
+========================= */
+
+@media (max-width: 420px) {
+
+    .logo-area img {
+        width: 52px;
+        height: 52px;
+    }
+
+    .logo-texto {
+        font-size: 22px;
+    }
+
+    .logo-subtitulo {
+        font-size: 12px;
     }
 
     .admin-btn {
-        font-size: 16px;
-        padding: 10px;
+        display: none !important;
     }
+
+    .noticia {
+        grid-template-columns: 110px 1fr;
+    }
+
+    .noticia h3 {
+        font-size: 16px;
+    }
+
+    .noticia p {
+        display: none;
+    }
+
 }
 
 </style>
 </head>
 
 <body>
+
+<!-- =========================
+     HEADER
+========================= -->
 
 <header>
 
@@ -619,10 +759,10 @@ footer {
 
 </header>
 
-<div class="barra"></div>
 
-
-<!-- MENÚ -->
+<!-- =========================
+     MENU
+========================= -->
 
 <div class="menu-lateral" id="menuLateral">
 
@@ -647,7 +787,9 @@ footer {
 </div>
 
 
-<!-- LOGIN -->
+<!-- =========================
+     LOGIN
+========================= -->
 
 <div class="login-admin" id="loginAdmin">
 
@@ -656,28 +798,26 @@ footer {
         <h2>🔐 Administración</h2>
 
         <p>
-            Ingresá con tu usuario para administrar
-            12 + 12 Noticias de Tigre.
+            Ingresá con tu email y contraseña
+            para administrar el sitio.
         </p>
 
         <input
             type="email"
             id="email"
-            placeholder="Email"
-            autocomplete="username">
+            placeholder="Email">
 
         <input
             type="password"
             id="password"
-            placeholder="Contraseña"
-            autocomplete="current-password">
+            placeholder="Contraseña">
 
         <button onclick="iniciarSesion()">
             Ingresar
         </button>
 
         <button
-            class="btn-cerrar-login"
+            class="cancelar"
             onclick="cerrarLogin()">
             Cancelar
         </button>
@@ -689,17 +829,21 @@ footer {
 </div>
 
 
-<!-- PANEL ADMIN -->
+<!-- =========================
+     PANEL ADMIN
+========================= -->
 
-<div class="panel-admin" id="panelAdmin">
+<div
+    class="panel-admin"
+    id="panelAdmin">
 
-    <div id="adminTitulo">
+    <div class="admin-titulo">
         ⚙️ Modo administrador
     </div>
 
     <p>
-        Desde acá podés publicar una nueva noticia
-        o editar una noticia existente.
+        Estás viendo la página como cualquier visitante,
+        pero tenés habilitadas las herramientas de administración.
     </p>
 
     <div class="admin-form">
@@ -742,20 +886,20 @@ footer {
             ⭐ Noticia destacada
         </label>
 
-        <div>
+        <div class="admin-botones">
 
             <button onclick="guardarNoticia()">
                 💾 Publicar noticia
             </button>
 
             <button
-                class="admin-cancelar"
+                class="gris"
                 onclick="cancelarEdicion()">
                 Cancelar
             </button>
 
             <button
-                class="admin-cancelar"
+                class="gris"
                 onclick="cerrarSesion()">
                 🚪 Cerrar sesión
             </button>
@@ -769,36 +913,47 @@ footer {
 </div>
 
 
-<!-- CONTENIDO -->
+<!-- =========================
+     CONTENIDO
+========================= -->
 
 <div class="contenedor">
 
     <div class="ultima">
-        ÚLTIMAS NOTICIAS
+        🔴 ÚLTIMAS NOTICIAS
     </div>
+
+
+    <!-- DESTACADA -->
 
     <div
         class="principal"
         id="noticiaDestacada">
 
-        <div class="imagen">
-            Cargando noticia destacada...
+        <div class="principal-imagen">
+            Cargando...
         </div>
 
-        <div class="contenido">
+        <div class="principal-contenido">
+
+            <div class="principal-categoria">
+                12 + 12 NOTICIAS
+            </div>
 
             <h1>
-                Cargando...
+                Cargando noticia destacada...
             </h1>
 
             <p>
-                Esperando la noticia destacada.
+                Esperando información...
             </p>
 
         </div>
 
     </div>
 
+
+    <!-- NOTICIAS -->
 
     <h2 class="seccion-titulo">
         Últimas noticias
@@ -810,6 +965,8 @@ footer {
     </div>
 
 
+    <!-- CATEGORIAS -->
+
     <h2 class="seccion-titulo">
         Secciones
     </h2>
@@ -818,19 +975,17 @@ footer {
 
         <div class="categoria">TIGRE</div>
         <div class="categoria">POLICIALES</div>
-        <div class="categoria">
-            INFORMACIÓN VECINAL
-        </div>
+        <div class="categoria">INFORMACIÓN VECINAL</div>
         <div class="categoria">POLÍTICA</div>
         <div class="categoria">DEPORTES</div>
-        <div class="categoria">
-            OBRAS Y SERVICIOS
-        </div>
+        <div class="categoria">OBRAS Y SERVICIOS</div>
         <div class="categoria">SOCIEDAD</div>
         <div class="categoria">GENERAL</div>
 
     </div>
 
+
+    <!-- REDES -->
 
     <div class="redes">
 
@@ -872,13 +1027,13 @@ footer {
 </footer>
 
 
+<!-- =========================
+     SUPABASE
+========================= -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
-/* =========================
-   SUPABASE
-========================= */
 
 const SUPABASE_URL =
 "https://piyabciajfhlarvecdvu.supabase.co";
@@ -892,17 +1047,12 @@ supabase.createClient(
     SUPABASE_KEY
 );
 
-
-/* =========================
-   VARIABLES
-========================= */
-
 let usuarioAdmin = false;
 let noticiaEditando = null;
 
 
 /* =========================
-   MENÚ
+   MENU
 ========================= */
 
 function abrirMenu() {
@@ -950,16 +1100,13 @@ function cerrarLogin() {
 async function iniciarSesion() {
 
     const email =
-        document
-            .getElementById("email")
-            .value
-            .trim();
+        document.getElementById("email")
+        .value
+        .trim();
 
     const password =
-        document
-            .getElementById("password")
-            .value;
-
+        document.getElementById("password")
+        .value;
 
     if (!email || !password) {
 
@@ -971,7 +1118,6 @@ async function iniciarSesion() {
         return;
     }
 
-
     const { error } =
         await supabaseClient
             .auth
@@ -981,7 +1127,6 @@ async function iniciarSesion() {
                 password: password
 
             });
-
 
     if (error) {
 
@@ -993,20 +1138,16 @@ async function iniciarSesion() {
         return;
     }
 
-
     usuarioAdmin = true;
-
 
     document
         .body
         .classList
         .add("modo-admin");
 
-
     document
         .getElementById("adminBtn")
         .style.display = "block";
-
 
     cerrarLogin();
 
@@ -1025,36 +1166,25 @@ async function iniciarSesion() {
 
 async function comprobarSesion() {
 
-    /*
-       IMPORTANTE:
+    const { data } =
+        await supabaseClient
+            .auth
+            .getSession();
 
-       No iniciar automáticamente el modo administrador.
+    if (data && data.session) {
 
-       Aunque Supabase tenga una sesión guardada,
-       la página comienza como visitante.
+        usuarioAdmin = true;
 
-       Para administrar se debe ingresar
-       nuevamente desde el botón Admin.
-    */
+        document
+            .body
+            .classList
+            .add("modo-admin");
 
-    usuarioAdmin = false;
+        document
+            .getElementById("adminBtn")
+            .style.display = "block";
 
-
-    document
-        .body
-        .classList
-        .remove("modo-admin");
-
-
-    document
-        .getElementById("adminBtn")
-        .style.display = "none";
-
-
-    document
-        .getElementById("panelAdmin")
-        .classList
-        .remove("visible");
+    }
 
 }
 
@@ -1072,58 +1202,45 @@ function abrirPanelAdmin() {
         return;
     }
 
-
     document
         .getElementById("panelAdmin")
         .classList
         .add("visible");
 
-
     window.scrollTo({
-
         top: 0,
-
         behavior: "smooth"
-
     });
 
 }
 
 
 /* =========================
-   CANCELAR EDICIÓN
+   CANCELAR
 ========================= */
 
 function cancelarEdicion() {
 
     noticiaEditando = null;
 
-
     document
-        .getElementById("adminTitulo")
-        .innerText =
-        "⚙️ Modo administrador";
-
+        .getElementById("adminTitulo");
 
     document
         .getElementById("titulo")
         .value = "";
 
-
     document
         .getElementById("contenido")
         .value = "";
-
 
     document
         .getElementById("imagen")
         .value = "";
 
-
     document
         .getElementById("destacada")
         .checked = false;
-
 
     document
         .getElementById("mensajeAdmin")
@@ -1145,13 +1262,11 @@ async function guardarNoticia() {
         return;
     }
 
-
     const titulo =
         document
             .getElementById("titulo")
             .value
             .trim();
-
 
     const contenido =
         document
@@ -1159,18 +1274,15 @@ async function guardarNoticia() {
             .value
             .trim();
 
-
     const categoria =
         document
             .getElementById("categoria")
             .value;
 
-
     const archivo =
         document
             .getElementById("imagen")
             .files[0];
-
 
     const destacada =
         document
@@ -1183,7 +1295,7 @@ async function guardarNoticia() {
         document
             .getElementById("mensajeAdmin")
             .innerText =
-            "⚠️ Completá el título y el contenido.";
+            "⚠️ Completá título y contenido.";
 
         return;
     }
@@ -1211,10 +1323,7 @@ async function guardarNoticia() {
                 Date.now() + "_" +
                 archivo.name;
 
-
-            const {
-                error: errorSubida
-            } =
+            const { error } =
                 await supabaseClient
                     .storage
                     .from("noticias")
@@ -1223,22 +1332,18 @@ async function guardarNoticia() {
                         archivo
                     );
 
-
-            if (errorSubida) {
+            if (error) {
 
                 document
                     .getElementById("mensajeAdmin")
                     .innerText =
                     "Error al subir imagen: " +
-                    errorSubida.message;
+                    error.message;
 
                 return;
             }
 
-
-            const {
-                data: urlImagen
-            } =
+            const { data } =
                 supabaseClient
                     .storage
                     .from("noticias")
@@ -1246,9 +1351,8 @@ async function guardarNoticia() {
                         nombreArchivo
                     );
 
-
             datosActualizar.imagen =
-                urlImagen.publicUrl;
+                data.publicUrl;
 
         }
 
@@ -1271,7 +1375,9 @@ async function guardarNoticia() {
         const { error } =
             await supabaseClient
                 .from("noticias")
-                .update(datosActualizar)
+                .update(
+                    datosActualizar
+                )
                 .eq(
                     "id",
                     noticiaEditando
@@ -1293,8 +1399,7 @@ async function guardarNoticia() {
         document
             .getElementById("mensajeAdmin")
             .innerText =
-            "✅ Noticia actualizada correctamente.";
-
+            "✅ Noticia actualizada.";
 
         cancelarEdicion();
 
@@ -1320,10 +1425,7 @@ async function guardarNoticia() {
             Date.now() + "_" +
             archivo.name;
 
-
-        const {
-            error: errorSubida
-        } =
+        const { error } =
             await supabaseClient
                 .storage
                 .from("noticias")
@@ -1332,22 +1434,18 @@ async function guardarNoticia() {
                     archivo
                 );
 
-
-        if (errorSubida) {
+        if (error) {
 
             document
                 .getElementById("mensajeAdmin")
                 .innerText =
                 "Error al subir imagen: " +
-                errorSubida.message;
+                error.message;
 
             return;
         }
 
-
-        const {
-            data: urlImagen
-        } =
+        const { data } =
             supabaseClient
                 .storage
                 .from("noticias")
@@ -1355,9 +1453,8 @@ async function guardarNoticia() {
                     nombreArchivo
                 );
 
-
         imagen =
-            urlImagen.publicUrl;
+            data.publicUrl;
 
     }
 
@@ -1407,7 +1504,6 @@ async function guardarNoticia() {
         .innerText =
         "✅ ¡Noticia publicada correctamente!";
 
-
     cancelarEdicion();
 
     cargarNoticias();
@@ -1423,10 +1519,7 @@ async function guardarNoticia() {
 
 async function cargarNoticias() {
 
-    const {
-        data,
-        error
-    } =
+    const { data, error } =
         await supabaseClient
             .from("noticias")
             .select("*")
@@ -1438,13 +1531,6 @@ async function cargarNoticias() {
             );
 
 
-    const contenedor =
-        document
-            .getElementById(
-                "contenedorNoticias"
-            );
-
-
     if (error) {
 
         console.error(
@@ -1452,12 +1538,20 @@ async function cargarNoticias() {
             error
         );
 
-        contenedor.innerHTML =
-            "<p>❌ Error cargando noticias.</p>";
+        document
+            .getElementById("contenedorNoticias")
+            .innerHTML =
+            "<p>❌ No se pudieron cargar las noticias.</p>";
 
         return;
     }
 
+
+    const contenedor =
+        document
+            .getElementById(
+                "contenedorNoticias"
+            );
 
     contenedor.innerHTML = "";
 
@@ -1474,8 +1568,7 @@ async function cargarNoticias() {
     data.forEach(noticia => {
 
         const articulo =
-            document.createElement("div");
-
+            document.createElement("article");
 
         articulo.className =
             "noticia";
@@ -1490,57 +1583,53 @@ async function cargarNoticias() {
         };
 
 
+        let resumen = "";
+
+        if (noticia.contenido) {
+
+            resumen =
+                noticia.contenido
+                    .split(/\n\s*\n/)
+                    [0]
+                    .trim();
+
+        }
+
+
         articulo.innerHTML = `
 
-            ${
-                noticia.imagen
+            <div class="noticia-imagen">
 
-                ?
+                ${
+                    noticia.imagen
 
-                `<img
-                    src="${noticia.imagen}"
-                    alt="${noticia.titulo}">
-                `
+                    ?
 
-                :
+                    `<img
+                        src="${noticia.imagen}"
+                        alt="${noticia.titulo}">`
 
-                `<div class="foto">
-                    NOTICIA
-                </div>`
-            }
+                    :
+
+                    "NOTICIA"
+                }
+
+            </div>
 
 
-            <div class="texto">
+            <div class="noticia-texto">
+
+                <div class="noticia-categoria">
+                    ${noticia.categoria || "GENERAL"}
+                </div>
 
                 <h3>
                     ${noticia.titulo}
                 </h3>
 
-
-                ${
-                    noticia.contenido
-
-                    ?
-
-                    `<p>
-                        ${
-                            noticia.contenido
-                                .split(/\n\s*\n/)
-                                .slice(0,1)
-                                .join("")
-                                .trim()
-                        }
-                    </p>`
-
-                    :
-
-                    ""
-                }
-
-
-                <span class="boton">
-                    ${noticia.categoria || "GENERAL"}
-                </span>
+                <p>
+                    ${resumen}
+                </p>
 
             </div>
 
@@ -1549,25 +1638,17 @@ async function cargarNoticias() {
 
                 <button
                     class="btn-editar"
-                    onclick="
-                        editarNoticia(
-                            event,
-                            ${noticia.id}
-                        )
-                    ">
+                    onclick="editarNoticia(event, ${noticia.id})">
                     ✏️ Editar
                 </button>
 
-
                 <button
                     class="btn-destacar"
-                    onclick="
-                        cambiarDestacada(
-                            event,
-                            ${noticia.id},
-                            ${noticia.destacada}
-                        )
-                    ">
+                    onclick="cambiarDestacada(
+                        event,
+                        ${noticia.id},
+                        ${noticia.destacada}
+                    )">
 
                     ${
                         noticia.destacada
@@ -1579,15 +1660,12 @@ async function cargarNoticias() {
 
                 </button>
 
-
                 <button
                     class="btn-eliminar"
-                    onclick="
-                        eliminarNoticia(
-                            event,
-                            ${noticia.id}
-                        )
-                    ">
+                    onclick="eliminarNoticia(
+                        event,
+                        ${noticia.id}
+                    )">
                     🗑️ Eliminar
                 </button>
 
@@ -1611,10 +1689,7 @@ async function cargarNoticias() {
 
 async function cargarNoticiaDestacada() {
 
-    const {
-        data,
-        error
-    } =
+    const { data, error } =
         await supabaseClient
             .from("noticias")
             .select("*")
@@ -1652,14 +1727,18 @@ async function cargarNoticiaDestacada() {
 
         contenedor.innerHTML = `
 
-            <div class="imagen">
+            <div class="principal-imagen">
                 No hay noticia destacada
             </div>
 
-            <div class="contenido">
+            <div class="principal-contenido">
+
+                <div class="principal-categoria">
+                    12 + 12 NOTICIAS
+                </div>
 
                 <h1>
-                    12 + 12 Noticias de Tigre
+                    Noticias de Tigre
                 </h1>
 
                 <p>
@@ -1689,9 +1768,22 @@ async function cargarNoticiaDestacada() {
         };
 
 
+    let resumen = "";
+
+    if (noticia.contenido) {
+
+        resumen =
+            noticia.contenido
+                .split(/\n\s*\n/)
+                .slice(0,2)
+                .join("\n\n");
+
+    }
+
+
     contenedor.innerHTML = `
 
-        <div class="imagen">
+        <div class="principal-imagen">
 
             ${
                 noticia.imagen
@@ -1700,8 +1792,7 @@ async function cargarNoticiaDestacada() {
 
                 `<img
                     src="${noticia.imagen}"
-                    alt="${noticia.titulo}">
-                `
+                    alt="${noticia.titulo}">`
 
                 :
 
@@ -1711,79 +1802,52 @@ async function cargarNoticiaDestacada() {
         </div>
 
 
-        <div class="contenido">
+        <div class="principal-contenido">
+
+            <div class="principal-categoria">
+                ${noticia.categoria || "GENERAL"}
+            </div>
 
             <h1>
                 ${noticia.titulo}
             </h1>
 
+            <p>
+                ${resumen}
+            </p>
 
-            ${
-                noticia.contenido
-
-                ?
-
-                noticia.contenido
-                    .split(/\n\s*\n/)
-                    .slice(0,2)
-                    .map(
-                        parrafo =>
-                        `<p>
-                            ${parrafo.trim()}
-                        </p>`
-                    )
-                    .join("")
-
-                :
-
-                ""
-            }
+        </div>
 
 
-            <span class="boton">
-                ${noticia.categoria || "GENERAL"}
-            </span>
+        <div class="controles-admin">
 
+            <button
+                class="btn-editar"
+                onclick="editarNoticia(
+                    event,
+                    ${noticia.id}
+                )">
+                ✏️ Editar
+            </button>
 
-            <div class="controles-admin">
+            <button
+                class="btn-destacar"
+                onclick="cambiarDestacada(
+                    event,
+                    ${noticia.id},
+                    true
+                )">
+                ☆ Quitar destaque
+            </button>
 
-                <button
-                    class="btn-editar"
-                    onclick="
-                        editarNoticia(
-                            event,
-                            ${noticia.id}
-                        )
-                    ">
-                    ✏️ Editar
-                </button>
-
-
-                <button
-                    class="btn-destacar"
-                    onclick="
-                        cambiarDestacada(
-                            event,
-                            ${noticia.id},
-                            true
-                        )
-                    ">
-                    ☆ Quitar destaque
-                </button>
-
-
-                <button
-                    class="btn-eliminar"
-                    onclick="
-                        eliminarNoticia(
-                            event,
-                            ${noticia.id}
-                        )
-                    ">
-                    🗑️ Eliminar
-                </button>
-
-            </div>
+            <button
+                class="btn-eliminar"
+                onclick="eliminarNoticia(
+                    event,
+                    ${noticia.id}
+                )">
+                🗑️ Eliminar
+            </button>
 
         </div>
 
@@ -1800,7 +1864,6 @@ async function editarNoticia(event, id) {
 
     event.stopPropagation();
 
-
     if (!usuarioAdmin) {
 
         abrirLogin();
@@ -1809,10 +1872,7 @@ async function editarNoticia(event, id) {
     }
 
 
-    const {
-        data,
-        error
-    } =
+    const { data, error } =
         await supabaseClient
             .from("noticias")
             .select("*")
@@ -1836,12 +1896,6 @@ async function editarNoticia(event, id) {
 
     noticiaEditando =
         id;
-
-
-    document
-        .getElementById("adminTitulo")
-        .innerText =
-        "✏️ Editando noticia";
 
 
     document
@@ -1871,8 +1925,7 @@ async function editarNoticia(event, id) {
     document
         .getElementById("mensajeAdmin")
         .innerText =
-        "Modificá los datos y guardá los cambios.";
-
+        "✏️ Editando noticia. Guardá los cambios.";
 
     abrirPanelAdmin();
 
@@ -1890,7 +1943,6 @@ async function cambiarDestacada(
 ) {
 
     event.stopPropagation();
-
 
     if (!usuarioAdmin) {
 
@@ -1915,9 +1967,7 @@ async function cambiarDestacada(
     }
 
 
-    const {
-        error
-    } =
+    const { error } =
         await supabaseClient
             .from("noticias")
             .update({
@@ -1961,7 +2011,6 @@ async function eliminarNoticia(
 
     event.stopPropagation();
 
-
     if (!usuarioAdmin) {
 
         abrirLogin();
@@ -1980,9 +2029,7 @@ async function eliminarNoticia(
     }
 
 
-    const {
-        error
-    } =
+    const { error } =
         await supabaseClient
             .from("noticias")
             .delete()
@@ -2020,28 +2067,23 @@ async function cerrarSesion() {
         .auth
         .signOut();
 
-
     usuarioAdmin = false;
 
     noticiaEditando = null;
-
 
     document
         .body
         .classList
         .remove("modo-admin");
 
-
     document
         .getElementById("adminBtn")
         .style.display = "none";
-
 
     document
         .getElementById("panelAdmin")
         .classList
         .remove("visible");
-
 
     cancelarEdicion();
 
@@ -2052,12 +2094,6 @@ async function cerrarSesion() {
    INICIO
 ========================= */
 
-/*
-   IMPORTANTE:
-   Primero comprobamos el estado visual
-   y luego cargamos las noticias públicas.
-*/
-
 comprobarSesion();
 
 cargarNoticias();
@@ -2067,5 +2103,3 @@ cargarNoticiaDestacada();
 </script>
 
 </body>
-</html>
-```
