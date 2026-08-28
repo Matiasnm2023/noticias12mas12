@@ -510,6 +510,11 @@ async function cargarNoticias() {
 
         articulo.className =
             "noticia";
+        articulo.style.cursor = "pointer";
+
+articulo.onclick = function() {
+    window.location.href = "noticias.html?id=" + noticia.id;
+};
 
 
         const resumen =
