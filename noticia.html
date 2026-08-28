@@ -1,0 +1,352 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Noticia - 12 + 12 Noticias de Tigre</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f1f3f5;
+    color: #222;
+}
+
+header {
+    background: #111;
+    color: white;
+    text-align: center;
+    padding: 22px 15px;
+}
+
+.logo img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.logo-text {
+    font-size: 38px;
+    font-weight: 900;
+    margin-top: 8px;
+}
+
+.subtitulo {
+    color: #ddd;
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+nav {
+    background: #e30613;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 15px 18px;
+}
+
+nav a:hover {
+    background: #b9000c;
+}
+
+.contenedor {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+.noticia-completa {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.categoria {
+    display: inline-block;
+    background: #e30613;
+    color: white;
+    padding: 7px 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+h1 {
+    font-size: 40px;
+    line-height: 1.2;
+    margin: 0 0 15px;
+}
+
+.fecha {
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.imagen-principal {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 25px;
+}
+
+.contenido {
+    font-size: 20px;
+    line-height: 1.7;
+}
+
+.contenido p {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.volver {
+    display: inline-block;
+    margin-top: 25px;
+    background: #111;
+    color: white;
+    padding: 12px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.volver:hover {
+    background: #333;
+}
+
+.error {
+    text-align: center;
+    padding: 40px;
+    font-size: 20px;
+}
+
+footer {
+    margin-top: 40px;
+    background: #111;
+    color: white;
+    text-align: center;
+    padding: 25px 15px;
+}
+
+@media (max-width: 700px) {
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .contenido {
+        font-size: 18px;
+    }
+
+    .noticia-completa {
+        padding: 18px;
+    }
+
+    nav a {
+        padding: 11px 9px;
+        font-size: 13px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <img src="./logo.jpg" alt="12 + 12 Noticias de Tigre">
+    </div>
+
+    <div class="logo-text">
+        12 + 12
+    </div>
+
+    <div class="subtitulo">
+        Noticias de Tigre
+    </div>
+
+</header>
+
+<nav>
+    <a href="index.html">INICIO</a>
+    <a href="#">TIGRE</a>
+    <a href="#">POLICIALES</a>
+    <a href="#">INFORMACIÓN VECINAL</a>
+    <a href="#">POLÍTICA</a>
+    <a href="#">DEPORTES</a>
+    <a href="#">GENERAL</a>
+</nav>
+
+<div class="contenedor">
+
+    <div class="noticia-completa" id="noticia">
+
+        <div class="error">
+            Cargando noticia...
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+
+    <strong>12 + 12 Noticias de Tigre</strong>
+
+    <br><br>
+
+    Información local y actualidad
+
+    <br><br>
+
+    © 2026 - Todos los derechos reservados
+
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+"https://piyabciajfhlarvecdvu.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK";
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+async function cargarNoticia() {
+
+    const parametros =
+        new URLSearchParams(window.location.search);
+
+    const id =
+        parametros.get("id");
+
+    const contenedor =
+        document.getElementById("noticia");
+
+    if (!id) {
+
+        contenedor.innerHTML = `
+            <div class="error">
+                No se encontró la noticia.
+                <br><br>
+                <a class="volver" href="index.html">
+                    ← Volver a noticias
+                </a>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const { data, error } =
+        await supabaseClient
+        .from("noticias")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+
+    if (error || !data) {
+
+        contenedor.innerHTML = `
+            <div class="error">
+                No se pudo encontrar la noticia.
+                <br><br>
+                <a class="volver" href="index.html">
+                    ← Volver a noticias
+                </a>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const contenido =
+        data.contenido
+        ? data.contenido
+            .split(/\n\s*\n/)
+            .map(parrafo =>
+                `<p>${parrafo.trim()}</p>`
+            )
+            .join("")
+        : "";
+
+
+    contenedor.innerHTML = `
+
+        <div class="categoria">
+            ${data.categoria || "GENERAL"}
+        </div>
+
+        <h1>
+            ${data.titulo}
+        </h1>
+
+        <div class="fecha">
+            12 + 12 Noticias de Tigre
+        </div>
+
+        ${
+            data.imagen
+            ?
+            `<img
+                class="imagen-principal"
+                src="${data.imagen}"
+                alt="${data.titulo}">
+            `
+            :
+            ""
+        }
+
+        <div class="contenido">
+            ${contenido}
+        </div>
+
+        <a class="volver" href="index.html">
+            ← Volver a noticias
+        </a>
+
+    `;
+
+    document.title =
+        data.titulo +
+        " - 12 + 12 Noticias de Tigre";
+
+}
+
+
+cargarNoticia();
+
+</script>
+
+</body>
+</html>
+```
