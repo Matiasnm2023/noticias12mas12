@@ -278,26 +278,18 @@ Noticias de Tigre
 
 <div class="imagen">
 ESPACIO PARA FOTO DE LA NOTICIA PRINCIPAL
-</div>
+<div class="principal" id="noticiaDestacada">
+    <div class="imagen">
+        Cargando noticia destacada...
+    </div>
 
-<div class="contenido">
+    <div class="contenido">
+        <h1>Cargando...</h1>
 
-<h1>
-Bienvenidos a 12 + 12 Noticias de Tigre
-</h1>
-
-<p>
-Toda la información de Tigre y sus localidades.
-Noticias, información vecinal, policiales, política,
-deportes y todo lo que pasa en nuestra comunidad.
-</p>
-
-<a class="boton" href="#">
-LEER NOTICIA
-</a>
-
-</div>
-
+        <p>
+            Esperando la noticia destacada.
+        </p>
+    </div>
 </div>
 
 <h2 class="seccion-titulo">
@@ -428,8 +420,83 @@ async function cargarNoticias() {
 
     });
 
+}async function cargarNoticiaDestacada() {
+
+    const { data, error } =
+        await supabaseClient
+        .from("noticias")
+        .select("*")
+        .eq("destacada", true)
+        .order("fecha", { ascending: false })
+        .limit(1);
+
+    if (error) {
+        console.error("Error cargando noticia destacada:", error);
+        return;
+    }
+
+    const contenedor =
+        document.getElementById("noticiaDestacada");
+
+    if (!data || data.length === 0) {
+        contenedor.innerHTML = `
+            <div class="imagen">
+                No hay noticia destacada
+            </div>
+
+            <div class="contenido">
+                <h1>12 + 12 Noticias de Tigre</h1>
+                <p>
+                    Próximamente vas a encontrar aquí
+                    nuestra noticia destacada.
+                </p>
+            </div>
+        `;
+        return;
+    }
+
+    const noticia = data[0];
+
+    contenedor.innerHTML = `
+
+        <div class="imagen">
+
+            ${
+                noticia.imagen
+                ? `<img src="${noticia.imagen}"
+                    alt="${noticia.titulo}"
+                    style="width:100%;height:100%;object-fit:cover;">`
+                : "NOTICIA DESTACADA"
+            }
+
+        </div>
+
+        <div class="contenido">
+
+            <h1>${noticia.titulo}</h1>
+
+            <div class="contenido-noticia">
+
+                ${
+                    noticia.contenido
+                    ? noticia.contenido
+                        .split(/\n\s*\n/)
+                        .map(parrafo => `<p>${parrafo.trim()}</p>`)
+                        .join("")
+                    : ""
+                }
+
+            </div>
+
+            <span class="boton">
+                ${noticia.categoria || "GENERAL"}
+            </span>
+
+        </div>
+    `;
 }
 cargarNoticias();
+cargarNoticiaDestacada();
 </script>
 </body>
 </html>
