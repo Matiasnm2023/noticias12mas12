@@ -302,8 +302,7 @@ LEER NOTICIA
 Últimas noticias
 </h2>
 
-<div class="noticias" id="listaNoticias">
-</div>
+<div class="noticias" id="contenedorNoticias"></div>    
 
 <h2 class="seccion-titulo">
 Secciones
@@ -369,7 +368,8 @@ const supabaseClient = supabase.createClient(
 
 async function cargarNoticias() {
 
-    const { data, error } = await supabaseClient
+    const { data, error } =
+        await supabaseClient
         .from("noticias")
         .select("*")
         .order("fecha", { ascending: false });
@@ -379,29 +379,35 @@ async function cargarNoticias() {
         return;
     }
 
-    const lista = document.getElementById("listaNoticias");
+    const contenedor =
+        document.getElementById("contenedorNoticias");
 
-    lista.innerHTML = "";
+    contenedor.innerHTML = "";
 
     data.forEach(noticia => {
 
-        const tarjeta = document.createElement("div");
+        const articulo =
+            document.createElement("div");
 
-        tarjeta.className = "noticia";
+        articulo.className = "noticia";
 
-        tarjeta.innerHTML = `
-            <div class="foto">
-                ${noticia.imagen
-                    ? `<img src="${noticia.imagen}" style="width:100%;height:100%;object-fit:cover;">`
-                    : "NOTICIA"
-                }
-            </div>
+        articulo.innerHTML = `
+
+            ${
+                noticia.imagen
+                ? `<img src="${noticia.imagen}"
+                    alt="${noticia.titulo}"
+                    style="width:100%; height:150px; object-fit:cover;">`
+                : `<div class="foto">NOTICIA</div>`
+            }
 
             <div class="texto">
 
                 <h3>${noticia.titulo}</h3>
 
-                <p>${noticia.contenido || ""}</p>
+                <p>
+                    ${noticia.contenido || ""}
+                </p>
 
                 <span class="boton">
                     ${noticia.categoria || "GENERAL"}
@@ -410,8 +416,10 @@ async function cargarNoticias() {
             </div>
         `;
 
-        lista.appendChild(tarjeta);
+        contenedor.appendChild(articulo);
+
     });
+
 }
 cargarNoticias();
 </script>
