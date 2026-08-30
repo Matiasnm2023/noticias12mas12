@@ -1,6 +1,8 @@
 name: Generar paginas de noticias
 
 on:
+  push:
+    branches: [main]
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
@@ -10,6 +12,7 @@ permissions:
 
 jobs:
   generar:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Descargar repositorio
@@ -22,45 +25,36 @@ jobs:
         run: |
           python3 - <<'PY'
           import json, os, html, pathlib, urllib.request, urllib.parse
-
           base = os.environ['SUPABASE_URL']
           key = os.environ['SUPABASE_KEY']
           url = base + '/rest/v1/noticias?select=*&order=fecha.desc'
           req = urllib.request.Request(url, headers={'apikey': key, 'Authorization': 'Bearer ' + key})
           with urllib.request.urlopen(req, timeout=30) as r:
               noticias = json.load(r)
-
           out = pathlib.Path('noticias')
           out.mkdir(exist_ok=True)
-
           css = '*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f1f3f5;color:#222}header{background:#111;color:#fff;text-align:center;padding:20px 15px}.logo img{width:110px;height:110px;object-fit:cover;border-radius:50%}.logo-text{font-size:36px;font-weight:900;margin-top:5px}.subtitulo{color:#ddd;font-size:17px}nav{background:#e30613;display:flex;justify-content:center;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;font-weight:bold;padding:14px 18px}.contenedor{max-width:900px;margin:30px auto;padding:0 15px}.noticia{background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.12)}.contenido{padding:30px}.categoria{display:inline-block;background:#e30613;color:#fff;padding:7px 12px;border-radius:4px;font-size:14px;font-weight:bold;margin-bottom:15px}h1{font-size:42px;line-height:1.15;margin:0 0 15px}.fecha{color:#777;font-size:14px;margin-bottom:20px}.imagen{width:100%;max-height:550px;object-fit:cover;display:block}.texto p{font-size:19px;line-height:1.7;margin-bottom:20px;text-align:justify}.volver,.share{display:inline-block;margin-top:25px;background:#111;color:#fff;text-decoration:none;padding:12px 20px;border-radius:5px;font-weight:bold}.share{background:#1877F2;margin-left:6px}footer{margin-top:40px;background:#111;color:#fff;text-align:center;padding:25px 15px}@media(max-width:700px){h1{font-size:30px}.contenido{padding:20px}.texto p{font-size:17px}}'
-
           for n in noticias:
               nid = str(n.get('id',''))
-              if not nid:
-                  continue
+              if not nid: continue
               title = html.escape(str(n.get('titulo') or '12 + 12 Noticias de Tigre'))
               raw = str(n.get('contenido') or '')
               description = html.escape(' '.join(raw.replace('<',' ').split())[:200])
               image = str(n.get('imagen') or 'https://noticias12mas12.com.ar/logo.jpg')
-              if image.startswith('/'):
-                  image = 'https://noticias12mas12.com.ar' + image
-              elif image.startswith('./'):
-                  image = 'https://noticias12mas12.com.ar/' + image[2:]
+              if image.startswith('/'): image = 'https://noticias12mas12.com.ar' + image
+              elif image.startswith('./'): image = 'https://noticias12mas12.com.ar/' + image[2:]
               image = html.escape(image, quote=True)
               category = html.escape(str(n.get('categoria') or 'GENERAL'))
               date = ''
               if n.get('fecha'):
                   d = str(n['fecha'])[:10].split('-')
-                  if len(d) == 3:
-                      date = f'{d[2]}/{d[1]}/{d[0]}'
+                  if len(d) == 3: date = f'{d[2]}/{d[1]}/{d[0]}'
               paragraphs = ''.join('<p>' + html.escape(p.strip()) + '</p>' for p in raw.split('\n\n') if p.strip())
               page_url = f'https://noticias12mas12.com.ar/noticias/{nid}.html'
               fb = 'https://www.facebook.com/sharer/sharer.php?u=' + urllib.parse.quote(page_url, safe='')
               page = f'''<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>{title} | 12 + 12 Noticias de Tigre</title><meta property="og:site_name" content="12 + 12 Noticias de Tigre"><meta property="og:type" content="article"><meta property="og:title" content="{title}"><meta property="og:description" content="{description}"><meta property="og:image" content="{image}"><meta property="og:url" content="{page_url}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{title}"><meta name="twitter:description" content="{description}"><meta name="twitter:image" content="{image}"><style>{css}</style></head><body><header><div class="logo"><img src="../logo.jpg" alt="12 + 12 Noticias de Tigre"><div class="logo-text">12 + 12</div></div><div class="subtitulo">Noticias de Tigre</div></header><nav><a href="../index.html">INICIO</a><a href="../index.html">TIGRE</a><a href="../index.html">POLICIALES</a><a href="../index.html">INFORMACIÓN VECINAL</a><a href="../index.html">POLÍTICA</a><a href="../index.html">DEPORTES</a><a href="../index.html">GENERAL</a></nav><div class="contenedor"><article class="noticia"><div class="contenido"><span class="categoria">{category}</span><h1>{title}</h1>{('<div class="fecha">📅 Publicado el '+date+'</div>') if date else ''}</div><img class="imagen" src="{image}" alt="{title}"><div class="contenido"><div class="texto">{paragraphs}</div><a class="share" href="{fb}" target="_blank">Compartir en Facebook</a><a class="volver" href="../index.html">← Volver a las noticias</a></div></article></div><footer><strong>12 + 12 Noticias de Tigre</strong><br><br>Información local y actualidad<br><br>© 2026 - Todos los derechos reservados</footer></body></html>'''
               (out / f'{nid}.html').write_text(page, encoding='utf-8')
           PY
-
       - name: Publicar cambios
         run: |
           git config user.name "github-actions[bot]"
