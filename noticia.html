@@ -4,18 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>12 + 12 Noticias de Tigre</title>
-<meta property="og:site_name" content="12 + 12 Noticias de Tigre">
-<meta property="og:type" content="article">
-<meta property="og:title" content="12 + 12 Noticias de Tigre">
-<meta property="og:description" content="Noticias de Tigre y toda la información local.">
-<meta property="og:image" content="https://noticias12mas12.com.ar/logo.jpg">
-<meta property="og:url" content="https://noticias12mas12.com.ar/">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="12 + 12 Noticias de Tigre">
-<meta name="twitter:description" content="Noticias de Tigre y toda la información local.">
-<meta name="twitter:image" content="https://noticias12mas12.com.ar/logo.jpg">
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f1f3f5;color:#222}header{background:#111;color:white;text-align:center;padding:20px 15px}.logo img{width:110px;height:110px;object-fit:cover;border-radius:50%}.logo-text{font-size:36px;font-weight:900;margin-top:5px}.subtitulo{color:#ddd;font-size:17px}nav{background:#e30613;display:flex;justify-content:center;flex-wrap:wrap}nav a{color:white;text-decoration:none;font-weight:bold;padding:14px 18px}nav a:hover{background:#b9000c}.contenedor{max-width:900px;margin:30px auto;padding:0 15px}.noticia-completa{background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.12)}.contenido{padding:30px}.categoria{display:inline-block;background:#e30613;color:white;padding:7px 12px;border-radius:4px;font-size:14px;font-weight:bold;margin-bottom:15px}h1{font-size:42px;line-height:1.15;margin:0 0 15px}.fecha{color:#777;font-size:14px;margin-bottom:20px}.imagen-principal{width:100%;max-height:550px;object-fit:cover;display:block}.texto-noticia p{font-size:19px;line-height:1.7;margin-bottom:20px;text-align:justify}.volver{display:inline-block;margin-top:25px;background:#111;color:white;text-decoration:none;padding:12px 20px;border-radius:5px;font-weight:bold}.compartir{margin-top:30px;padding-top:20px;border-top:1px solid #ddd}.compartir strong{display:block;margin-bottom:12px}.compartir a{display:inline-block;padding:12px 18px;margin-right:7px;border-radius:6px;color:white;text-decoration:none;font-weight:bold;cursor:pointer}.whatsapp{background:#25D366}.facebook{background:#1877F2}.error{background:white;padding:40px;text-align:center;border-radius:8px}footer{margin-top:40px;background:#111;color:white;text-align:center;padding:25px 15px}@media(max-width:700px){h1{font-size:30px}.contenido{padding:20px}.texto-noticia p{font-size:17px}.compartir a{display:block;text-align:center;margin:8px 0;width:100%}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f1f3f5;color:#222}header{background:#111;color:white;text-align:center;padding:20px 15px}.logo img{width:110px;height:110px;object-fit:cover;border-radius:50%}.logo-text{font-size:36px;font-weight:900;margin-top:5px}.subtitulo{color:#ddd;font-size:17px}nav{background:#e30613;display:flex;justify-content:center;flex-wrap:wrap}nav a{color:white;text-decoration:none;font-weight:bold;padding:14px 18px}nav a:hover{background:#b9000c}.contenedor{max-width:900px;margin:30px auto;padding:0 15px}.noticia-completa{background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.12)}.contenido{padding:30px}.categoria{display:inline-block;background:#e30613;color:white;padding:7px 12px;border-radius:4px;font-size:14px;font-weight:bold;margin-bottom:15px}h1{font-size:42px;line-height:1.15;margin:0 0 15px}.fecha{color:#777;font-size:14px;margin-bottom:20px}.imagen-principal{width:100%;max-height:550px;object-fit:cover;display:block}.texto-noticia p{font-size:19px;line-height:1.7;margin-bottom:20px;text-align:justify}.volver{display:inline-block;margin-top:25px;background:#111;color:white;text-decoration:none;padding:12px 20px;border-radius:5px;font-weight:bold}.compartir{margin-top:30px;padding-top:20px;border-top:1px solid #ddd}.compartir strong{display:block;margin-bottom:12px}.compartir a{display:block;width:100%;padding:14px 18px;margin:10px 0;border-radius:7px;color:white;text-decoration:none;font-weight:bold;text-align:center;font-size:17px}.whatsapp{background:#25D366}.facebook{background:#1877F2}.error{background:white;padding:40px;text-align:center;border-radius:8px}footer{margin-top:40px;background:#111;color:white;text-align:center;padding:25px 15px}@media(max-width:700px){h1{font-size:30px}.contenido{padding:20px}.texto-noticia p{font-size:17px}}
 </style>
 </head>
 <body>
@@ -28,18 +18,25 @@
 const SUPABASE_URL="https://piyabciajfhlarvecdvu.supabase.co";
 const SUPABASE_KEY="sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK";
 const supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const parametros=new URLSearchParams(window.location.search);
-const id=parametros.get("id");
-function cambiarMeta(nombre,contenido,property=false){let meta=document.querySelector(property?`meta[property="${nombre}"]`:`meta[name="${nombre}"]`);if(!meta){meta=document.createElement("meta");meta.setAttribute(property?"property":"name",nombre);document.head.appendChild(meta)}meta.setAttribute("content",contenido)}
-async function cargarNoticia(){const contenedor=document.getElementById("contenidoNoticia");if(!id){contenedor.innerHTML='<div class="error"><h2>Noticia no encontrada</h2><p>No se indicó qué noticia querés ver.</p><a class="volver" href="./index.html">← Volver a las noticias</a></div>';return}const {data,error}=await supabaseClient.from("noticias").select("*").eq("id",id).single();if(error||!data){console.error(error);contenedor.innerHTML='<div class="error"><h2>Noticia no encontrada</h2><p>La noticia que buscás no existe o fue eliminada.</p><a class="volver" href="./index.html">← Volver a las noticias</a></div>';return}
-const titulo=data.titulo||"12 + 12 Noticias de Tigre";const descripcion=data.contenido?String(data.contenido).replace(/<[^>]*>/g,"").replace(/\s+/g," ").substring(0,200):"Noticias de Tigre y toda la información local.";let imagen=data.imagen||"https://noticias12mas12.com.ar/logo.jpg";try{imagen=new URL(imagen,window.location.href).href}catch(e){}
-const urlActual=window.location.href;
-const urlCompartir=id?new URL("noticias/"+encodeURIComponent(id)+".html",window.location.origin).href:urlActual;
-document.title=titulo+" | 12 + 12 Noticias de Tigre";cambiarMeta("og:title",titulo,true);cambiarMeta("og:description",descripcion,true);cambiarMeta("og:image",imagen,true);cambiarMeta("og:url",urlCompartir,true);cambiarMeta("og:type","article",true);cambiarMeta("og:site_name","12 + 12 Noticias de Tigre",true);cambiarMeta("twitter:title",titulo);cambiarMeta("twitter:description",descripcion);cambiarMeta("twitter:image",imagen);
-let fechaTexto="";if(data.fecha){fechaTexto=new Date(data.fecha).toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric"})}let contenidoHTML="";if(data.contenido){contenidoHTML=String(data.contenido).split(/\n\s*\n/).map(parrafo=>`<p>${escapeHTML(parrafo.trim())}</p>`).join("")}
-const whatsapp="https://wa.me/?text="+encodeURIComponent(titulo+" - "+urlCompartir);const facebook="https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(urlCompartir);
-contenedor.innerHTML=`<div class="contenido"><span class="categoria">${escapeHTML(data.categoria||"GENERAL")}</span><h1>${escapeHTML(titulo)}</h1>${fechaTexto?`<div class="fecha">📅 Publicado el ${fechaTexto}</div>`:""}</div>${imagen?`<img class="imagen-principal" src="${escapeHTML(imagen)}" alt="${escapeHTML(titulo)}">`:""}<div class="contenido"><div class="texto-noticia">${contenidoHTML}</div><div class="compartir"><strong>Compartir esta noticia</strong><a class="whatsapp" href="${whatsapp}" target="_blank" rel="noopener noreferrer">🟢 Compartir por WhatsApp</a><a class="facebook" href="${facebook}" target="_blank" rel="noopener noreferrer">🔵 Compartir en Facebook</a></div><a class="volver" href="./index.html">← Volver a las noticias</a></div>`}
+const id=new URLSearchParams(window.location.search).get("id");
 function escapeHTML(texto){return String(texto||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;")}
+async function cargarNoticia(){
+ const contenedor=document.getElementById("contenidoNoticia");
+ if(!id){contenedor.innerHTML='<div class="error"><h2>Noticia no encontrada</h2><p>No se indicó qué noticia querés ver.</p><a class="volver" href="./index.html">← Volver a las noticias</a></div>';return}
+ const {data,error}=await supabaseClient.from("noticias").select("*").eq("id",id).single();
+ if(error||!data){contenedor.innerHTML='<div class="error"><h2>Noticia no encontrada</h2><p>La noticia que buscás no existe o fue eliminada.</p><a class="volver" href="./index.html">← Volver a las noticias</a></div>';return}
+ const titulo=data.titulo||"12 + 12 Noticias de Tigre";
+ let imagen=data.imagen||"https://noticias12mas12.com.ar/logo.jpg";
+ try{imagen=new URL(imagen,window.location.href).href}catch(e){}
+ const urlActual=window.location.href;
+ const whatsapp="https://wa.me/?text="+encodeURIComponent(titulo+"\n"+urlActual);
+ const facebook="https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(urlActual);
+ document.title=titulo+" | 12 + 12 Noticias de Tigre";
+ let fechaTexto=data.fecha?new Date(data.fecha).toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric"}):"";
+ let contenidoHTML=data.contenido?String(data.contenido).split(/\n\s*\n/).map(p=>`<p>${escapeHTML(p.trim())}</p>`).join(""):"";
+ contenedor.innerHTML=`<div class="contenido"><span class="categoria">${escapeHTML(data.categoria||"GENERAL")}</span><h1>${escapeHTML(titulo)}</h1>${fechaTexto?`<div class="fecha">📅 Publicado el ${fechaTexto}</div>`:""}</div>${imagen?`<img class="imagen-principal" src="${escapeHTML(imagen)}" alt="${escapeHTML(titulo)}">`:""}<div class="contenido"><div class="texto-noticia">${contenidoHTML}</div><div class="compartir"><strong>Compartir esta noticia</strong><a class="whatsapp" href="${whatsapp}" target="_blank" rel="noopener noreferrer">🟢 COMPARTIR POR WHATSAPP</a><a class="facebook" href="${facebook}" target="_blank" rel="noopener noreferrer">🔵 COMPARTIR EN FACEBOOK</a></div><a class="volver" href="./index.html">← Volver a las noticias</a></div>`;
+}
 cargarNoticia();
 </script>
-</body></html>
+</body>
+</html>
