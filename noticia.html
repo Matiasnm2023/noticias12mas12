@@ -1,15 +1,26 @@
+```html
 <!DOCTYPE html>
-
 <html lang="es">
 
 <head>
 
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>12 + 12 Noticias de Tigre</title>
+
+<!-- OPEN GRAPH -->
+<meta property="og:site_name" content="12 + 12 Noticias de Tigre">
+<meta property="og:type" content="article">
+<meta property="og:title" content="12 + 12 Noticias de Tigre">
+<meta property="og:description" content="Noticias de Tigre y toda la información local.">
+<meta property="og:image" content="https://noticias12mas12.com.ar/logo.jpg">
+<meta property="og:url" content="https://noticias12mas12.com.ar/">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="12 + 12 Noticias de Tigre">
+<meta name="twitter:description" content="Noticias de Tigre y toda la información local.">
+<meta name="twitter:image" content="https://noticias12mas12.com.ar/logo.jpg">
 
 <style>
 
@@ -23,8 +34,6 @@ body {
     background: #f1f3f5;
     color: #222;
 }
-
-/* ENCABEZADO */
 
 header {
     background: #111;
@@ -51,8 +60,6 @@ header {
     font-size: 17px;
 }
 
-/* BARRA */
-
 nav {
     background: #e30613;
     display: flex;
@@ -71,15 +78,11 @@ nav a:hover {
     background: #b9000c;
 }
 
-/* CONTENIDO */
-
 .contenedor {
     max-width: 900px;
     margin: 30px auto;
     padding: 0 15px;
 }
-
-/* NOTICIA */
 
 .noticia-completa {
     background: white;
@@ -129,8 +132,6 @@ h1 {
     text-align: justify;
 }
 
-/* VOLVER */
-
 .volver {
     display: inline-block;
     margin-top: 25px;
@@ -145,8 +146,6 @@ h1 {
 .volver:hover {
     background: #333;
 }
-
-/* COMPARTIR */
 
 .compartir {
     margin-top: 30px;
@@ -177,16 +176,12 @@ h1 {
     background: #1877F2;
 }
 
-/* ERROR */
-
 .error {
     background: white;
     padding: 40px;
     text-align: center;
     border-radius: 8px;
 }
-
-/* FOOTER */
 
 footer {
     margin-top: 40px;
@@ -195,8 +190,6 @@ footer {
     text-align: center;
     padding: 25px 15px;
 }
-
-/* CELULAR */
 
 @media (max-width: 700px) {
 
@@ -252,33 +245,13 @@ Noticias de Tigre
 
 <nav>
 
-<a href="./index.html">
-INICIO
-</a>
-
-<a href="./index.html">
-TIGRE
-</a>
-
-<a href="./index.html">
-POLICIALES
-</a>
-
-<a href="./index.html">
-INFORMACIÓN VECINAL
-</a>
-
-<a href="./index.html">
-POLÍTICA
-</a>
-
-<a href="./index.html">
-DEPORTES
-</a>
-
-<a href="./index.html">
-GENERAL
-</a>
+<a href="./index.html">INICIO</a>
+<a href="./index.html">TIGRE</a>
+<a href="./index.html">POLICIALES</a>
+<a href="./index.html">INFORMACIÓN VECINAL</a>
+<a href="./index.html">POLÍTICA</a>
+<a href="./index.html">DEPORTES</a>
+<a href="./index.html">GENERAL</a>
 
 </nav>
 
@@ -290,13 +263,9 @@ GENERAL
 
 <div class="error">
 
-<h2>
-Cargando noticia...
-</h2>
+<h2>Cargando noticia...</h2>
 
-<p>
-Esperá unos segundos.
-</p>
+<p>Esperá unos segundos.</p>
 
 </div>
 
@@ -322,9 +291,7 @@ Información local y actualidad
 
 </footer>
 
-<script
-src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
@@ -333,7 +300,6 @@ const SUPABASE_URL =
 
 const SUPABASE_KEY =
 "sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK";
-
 
 const supabaseClient =
 supabase.createClient(
@@ -351,6 +317,43 @@ new URLSearchParams(
 
 const id =
 parametros.get("id");
+
+
+/* CAMBIAR META TAG */
+
+function cambiarMeta(nombre, contenido, property = false) {
+
+    let meta;
+
+    if (property) {
+
+        meta = document.querySelector(
+            `meta[property="${nombre}"]`
+        );
+
+    } else {
+
+        meta = document.querySelector(
+            `meta[name="${nombre}"]`
+        );
+
+    }
+
+    if (!meta) {
+
+        meta = document.createElement("meta");
+
+        if (property) {
+            meta.setAttribute("property", nombre);
+        } else {
+            meta.setAttribute("name", nombre);
+        }
+
+        document.head.appendChild(meta);
+    }
+
+    meta.setAttribute("content", contenido);
+}
 
 
 /* CARGAR NOTICIA */
@@ -394,6 +397,8 @@ return;
 }
 
 
+/* BUSCAR EN SUPABASE */
+
 const { data, error } =
 await supabaseClient
 .from("noticias")
@@ -434,6 +439,126 @@ href="./index.html">
 return;
 
 }
+
+
+/* DATOS */
+
+const titulo =
+data.titulo ||
+"12 + 12 Noticias de Tigre";
+
+const descripcion =
+data.contenido
+?
+data.contenido
+.replace(/<[^>]*>/g, "")
+.replace(/\s+/g, " ")
+.substring(0, 200)
+:
+"Noticias de Tigre y toda la información local.";
+
+
+/* IMAGEN */
+
+let imagen =
+data.imagen ||
+"https://noticias12mas12.com.ar/logo.jpg";
+
+
+/*
+SI LA IMAGEN VIENE COMO RUTA RELATIVA,
+CONVERTIRLA EN URL ABSOLUTA
+*/
+
+if (
+    imagen.startsWith("/")
+) {
+
+    imagen =
+    "https://noticias12mas12.com.ar" +
+    imagen;
+
+}
+
+if (
+    imagen.startsWith("./")
+) {
+
+    imagen =
+    "https://noticias12mas12.com.ar/" +
+    imagen.substring(2);
+
+}
+
+
+/* URL */
+
+const urlActual =
+window.location.href;
+
+
+/* CAMBIAR TÍTULO */
+
+document.title =
+titulo +
+" | 12 + 12 Noticias de Tigre";
+
+
+/* OPEN GRAPH */
+
+cambiarMeta(
+    "og:title",
+    titulo,
+    true
+);
+
+cambiarMeta(
+    "og:description",
+    descripcion,
+    true
+);
+
+cambiarMeta(
+    "og:image",
+    imagen,
+    true
+);
+
+cambiarMeta(
+    "og:url",
+    urlActual,
+    true
+);
+
+cambiarMeta(
+    "og:type",
+    "article",
+    true
+);
+
+cambiarMeta(
+    "og:site_name",
+    "12 + 12 Noticias de Tigre",
+    true
+);
+
+
+/* TWITTER */
+
+cambiarMeta(
+    "twitter:title",
+    titulo
+);
+
+cambiarMeta(
+    "twitter:description",
+    descripcion
+);
+
+cambiarMeta(
+    "twitter:image",
+    imagen
+);
 
 
 /* FECHA */
@@ -481,18 +606,12 @@ ${parrafo.trim()}
 }
 
 
-/* URL */
-
-const urlActual =
-window.location.href;
-
-
 /* WHATSAPP */
 
 const whatsapp =
 "https://wa.me/?text=" +
 encodeURIComponent(
-    data.titulo +
+    titulo +
     " - " +
     urlActual
 );
@@ -519,13 +638,11 @@ ${data.categoria || "GENERAL"}
 
 </span>
 
-
 <h1>
 
-${data.titulo}
+${titulo}
 
 </h1>
-
 
 ${
 fechaTexto
@@ -543,20 +660,18 @@ fechaTexto
 
 </div>
 
-
 ${
-data.imagen
+imagen
 ?
 `
 <img
 class="imagen-principal"
-src="${data.imagen}"
-alt="${data.titulo}">
+src="${imagen}"
+alt="${titulo}">
 `
 :
 ""
 }
-
 
 <div class="contenido">
 
@@ -566,13 +681,11 @@ ${contenidoHTML}
 
 </div>
 
-
 <div class="compartir">
 
 <strong>
 Compartir esta noticia
 </strong>
-
 
 <a
 class="whatsapp"
@@ -582,7 +695,6 @@ target="_blank">
 WhatsApp
 
 </a>
-
 
 <a
 class="facebook"
@@ -594,7 +706,6 @@ Facebook
 </a>
 
 </div>
-
 
 <a
 class="volver"
@@ -618,3 +729,4 @@ cargarNoticia();
 </body>
 
 </html>
+```
