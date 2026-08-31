@@ -24,7 +24,7 @@ jobs:
           SUPABASE_KEY: sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK
         run: |
           python3 - <<'PY'
-          import json, os, html, pathlib, urllib.request, urllib.parse
+          import json, os, html, pathlib, urllib.request, urllib.parse, re
           base = os.environ['SUPABASE_URL']
           key = os.environ['SUPABASE_KEY']
           url = base + '/rest/v1/noticias?select=*&order=fecha.desc'
@@ -33,13 +33,35 @@ jobs:
               noticias = json.load(r)
           out = pathlib.Path('noticias')
           out.mkdir(exist_ok=True)
-          css = '*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f1f3f5;color:#222}header{background:#111;color:#fff;text-align:center;padding:20px 15px}.logo img{width:110px;height:110px;object-fit:cover;border-radius:50%}.logo-text{font-size:36px;font-weight:900;margin-top:5px}.subtitulo{color:#ddd;font-size:17px}nav{background:#e30613;display:flex;justify-content:center;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;font-weight:bold;padding:14px 18px}.contenedor{max-width:900px;margin:30px auto;padding:0 15px}.noticia{background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.12)}.contenido{padding:30px}.categoria{display:inline-block;background:#e30613;color:#fff;padding:7px 12px;border-radius:4px;font-size:14px;font-weight:bold;margin-bottom:15px}h1{font-size:42px;line-height:1.15;margin:0 0 15px}.fecha{color:#777;font-size:14px;margin-bottom:20px}.imagen{width:100%;max-height:550px;object-fit:cover;display:block}.texto p{font-size:19px;line-height:1.7;margin-bottom:20px;text-align:justify}.volver,.share,.sharewa{display:inline-block;margin-top:25px;background:#111;color:#fff;text-decoration:none;padding:12px 20px;border-radius:5px;font-weight:bold}.share{background:#1877F2;margin-left:6px}.sharewa{background:#25D366;margin-left:6px}footer{margin-top:40px;background:#111;color:#fff;text-align:center;padding:25px 15px}@media(max-width:700px){h1{font-size:30px}.contenido{padding:20px}.texto p{font-size:17px}}'
+          css = '*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f1f3f5;color:#222}header{background:#111;color:#fff;text-align:center;padding:20px 15px}.logo img{width:110px;height:110px;object-fit:cover;border-radius:50%}.logo-text{font-size:36px;font-weight:900;margin-top:5px}.subtitulo{color:#ddd;font-size:17px}nav{background:#e30613;display:flex;justify-content:center;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;font-weight:bold;padding:14px 18px}.contenedor{max-width:900px;margin:30px auto;padding:0 15px}.noticia{background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.12)}.contenido{padding:30px}.categoria{display:inline-block;background:#e30613;color:#fff;padding:7px 12px;border-radius:4px;font-size:14px;font-weight:bold;margin-bottom:15px}h1{font-size:42px;line-height:1.15;margin:0 0 15px}.fecha{color:#777;font-size:14px;margin-bottom:20px}.imagen{width:100%;max-height:550px;height:auto;object-fit:contain;display:block;background:#eee}.texto p{font-size:19px;line-height:1.7;margin-bottom:20px;text-align:justify}.texto img{display:block;max-width:100%;height:auto;margin:20px auto;border-radius:6px}.texto video{display:block;width:100%;max-height:600px;height:auto;margin:20px auto}.texto iframe{display:block;width:100%;max-width:100%;min-height:500px;border:0;margin:20px auto}.texto a{color:#c00}.volver,.share,.sharewa{display:inline-block;margin-top:25px;background:#111;color:#fff;text-decoration:none;padding:12px 20px;border-radius:5px;font-weight:bold}.share{background:#1877F2;margin-left:6px}.sharewa{background:#25D366;margin-left:6px}footer{margin-top:40px;background:#111;color:#fff;text-align:center;padding:25px 15px}@media(max-width:700px){h1{font-size:30px}.contenido{padding:20px}.texto p{font-size:17px}.texto iframe{min-height:380px}}'
+          def contenido_html(raw):
+              raw = str(raw or '').strip()
+              if not raw: return ''
+              # El editor guarda HTML. Permitimos solo elementos multimedia y de formato seguros.
+              if '<' not in raw or '>' not in raw:
+                  return ''.join('<p>' + html.escape(p.strip()) + '</p>' for p in raw.split('\n\n') if p.strip())
+              allowed = {'p','br','strong','b','em','i','u','ul','ol','li','blockquote','h2','h3','a','img','video','source','iframe','div'}
+              def clean_tag(m):
+                  closing, name, attrs = m.group(1), m.group(2).lower(), m.group(3)
+                  if name not in allowed: return ''
+                  if closing: return f'</{name}>'
+                  if name == 'br': return '<br>'
+                  safe = []
+                  for am in re.finditer(r'([a-zA-Z:-]+)\s*=\s*["\']([^"\']*)["\']', attrs):
+                      k,v=am.group(1).lower(),am.group(2)
+                      if k in ('src','href','alt','title','target','width','height','controls','allow','allowfullscreen','loading'):
+                          if k in ('src','href') and not (v.startswith(('https://','http://','/','data:'))): continue
+                          safe.append(f' {k}="{html.escape(v, quote=True)}"')
+                  return '<'+name+''.join(safe)+'>'
+              cleaned = re.sub(r'<\s*(/?)\s*([a-zA-Z0-9]+)([^>]*)>', clean_tag, raw)
+              return cleaned
           for n in noticias:
               nid = str(n.get('id',''))
               if not nid: continue
               title = html.escape(str(n.get('titulo') or '12 + 12 Noticias de Tigre'))
               raw = str(n.get('contenido') or '')
-              description = html.escape(' '.join(raw.replace('<',' ').split())[:200])
+              plain = re.sub(r'<[^>]*>', ' ', raw)
+              description = html.escape(' '.join(plain.split())[:200])
               image = str(n.get('imagen') or 'https://noticias12mas12.com.ar/logo.jpg')
               if image.startswith('/'): image = 'https://noticias12mas12.com.ar' + image
               elif image.startswith('./'): image = 'https://noticias12mas12.com.ar/' + image[2:]
@@ -49,11 +71,11 @@ jobs:
               if n.get('fecha'):
                   d = str(n['fecha'])[:10].split('-')
                   if len(d) == 3: date = f'{d[2]}/{d[1]}/{d[0]}'
-              paragraphs = ''.join('<p>' + html.escape(p.strip()) + '</p>' for p in raw.split('\n\n') if p.strip())
+              content = contenido_html(raw)
               page_url = f'https://noticias12mas12.com.ar/noticias/{nid}.html'
               fb = 'https://www.facebook.com/sharer/sharer.php?u=' + urllib.parse.quote(page_url, safe='')
-              wa = 'https://wa.me/?text=' + urllib.parse.quote(title + ' - ' + page_url, safe='')
-              page = f'''<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>{title} | 12 + 12 Noticias de Tigre</title><meta property="og:site_name" content="12 + 12 Noticias de Tigre"><meta property="og:type" content="article"><meta property="og:title" content="{title}"><meta property="og:description" content="{description}"><meta property="og:image" content="{image}"><meta property="og:url" content="{page_url}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{title}"><meta name="twitter:description" content="{description}"><meta name="twitter:image" content="{image}"><style>{css}</style></head><body><header><div class="logo"><img src="../logo.jpg" alt="12 + 12 Noticias de Tigre"><div class="logo-text">12 + 12</div></div><div class="subtitulo">Noticias de Tigre</div></header><nav><a href="../index.html">INICIO</a><a href="../index.html">TIGRE</a><a href="../index.html">POLICIALES</a><a href="../index.html">INFORMACIÓN VECINAL</a><a href="../index.html">POLÍTICA</a><a href="../index.html">DEPORTES</a><a href="../index.html">GENERAL</a></nav><div class="contenedor"><article class="noticia"><div class="contenido"><span class="categoria">{category}</span><h1>{title}</h1>{('<div class="fecha">📅 Publicado el '+date+'</div>') if date else ''}</div><img class="imagen" src="{image}" alt="{title}"><div class="contenido"><div class="texto">{paragraphs}</div><a class="sharewa" href="{wa}" target="_blank" rel="noopener">Compartir por WhatsApp</a><a class="share" href="{fb}" target="_blank" rel="noopener">Compartir en Facebook</a><a class="volver" href="../index.html">← Volver a las noticias</a></div></article></div><footer><strong>12 + 12 Noticias de Tigre</strong><br><br>Información local y actualidad<br><br>© 2026 - Todos los derechos reservados</footer></body></html>'''
+              wa = 'https://wa.me/?text=' + urllib.parse.quote(str(n.get('titulo') or '') + ' - ' + page_url, safe='')
+              page = f'''<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>{title} | 12 + 12 Noticias de Tigre</title><meta property="og:site_name" content="12 + 12 Noticias de Tigre"><meta property="og:type" content="article"><meta property="og:title" content="{title}"><meta property="og:description" content="{description}"><meta property="og:image" content="{image}"><meta property="og:url" content="{page_url}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{title}"><meta name="twitter:description" content="{description}"><meta name="twitter:image" content="{image}"><style>{css}</style></head><body><header><div class="logo"><img src="../logo.jpg" alt="12 + 12 Noticias de Tigre"><div class="logo-text">12 + 12</div></div><div class="subtitulo">Noticias de Tigre</div></header><nav><a href="../index.html">INICIO</a><a href="../index.html">TIGRE</a><a href="../index.html">POLICIALES</a><a href="../index.html">INFORMACIÓN VECINAL</a><a href="../index.html">POLÍTICA</a><a href="../index.html">DEPORTES</a><a href="../index.html">GENERAL</a></nav><div class="contenedor"><article class="noticia"><div class="contenido"><span class="categoria">{category}</span><h1>{title}</h1>{('<div class="fecha">📅 Publicado el '+date+'</div>') if date else ''}</div><img class="imagen" src="{image}" alt="{title}"><div class="contenido"><div class="texto">{content}</div><a class="sharewa" href="{wa}" target="_blank" rel="noopener">Compartir por WhatsApp</a><a class="share" href="{fb}" target="_blank" rel="noopener">Compartir en Facebook</a><a class="volver" href="../index.html">← Volver a las noticias</a></div></article></div><footer><strong>12 + 12 Noticias de Tigre</strong><br><br>Información local y actualidad<br><br>© 2026 - Todos los derechos reservados</footer></body></html>'''
               (out / f'{nid}.html').write_text(page, encoding='utf-8')
           PY
       - name: Publicar cambios
@@ -62,5 +84,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add noticias
           git diff --cached --quiet && exit 0
-          git commit -m "Actualizar paginas compartibles de noticias"
+          git commit -m "Corregir contenido HTML y multimedia de noticias"
           git push
