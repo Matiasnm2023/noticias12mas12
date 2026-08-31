@@ -27,7 +27,8 @@ function absoluteImage(url, origin) {
 
 function replaceMeta(html, property, content) {
   const safe = escapeAttr(content);
-  const re = new RegExp(`<meta\\s+property=["']${property.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")}["']\\s+content=["'][^"']*["']\\s*/?>`, "i");
+  const escaped = property.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+  const re = new RegExp(`<meta\\s+property=["']${escaped}["']\\s+content=["'][^"']*["']\\s*/?>`, "i");
   const tag = `<meta property="${property}" content="${safe}">`;
   if (re.test(html)) return html.replace(re, tag);
   return html.replace(/<head>/i, `<head>\n${tag}`);
@@ -47,7 +48,7 @@ export async function onRequestGet(context) {
   const id = requestUrl.searchParams.get("id");
 
   const assetResponse = await context.env.ASSETS.fetch(
-    new Request(new URL("/noticia.html", requestUrl).href, request)
+    new Request(new URL("/noticia.html", requestUrl).href, context.request)
   );
 
   if (!id) return assetResponse;
@@ -63,6 +64,8 @@ export async function onRequestGet(context) {
       }
     });
 
+    if (!response.ok) return assetResponse;
+
     const rows = await response.json();
     const noticia = Array.isArray(rows) ? rows[0] : null;
 
@@ -72,7 +75,7 @@ export async function onRequestGet(context) {
     const titulo = noticia.titulo || "12 + 12 Noticias de Tigre";
     const descripcion = stripHtml(noticia.contenido).substring(0, 200) || "Noticias de Tigre y toda la información local.";
     const imagen = absoluteImage(noticia.imagen, requestUrl.origin);
-    const canonicalUrl = requestUrl.href;
+    const canonicalUrl = `${requestUrl.origin}/noticias/${id}.html`;
 
     html = replaceMeta(html, "og:title", titulo);
     html = replaceMeta(html, "og:description", descripcion);
@@ -80,6 +83,7 @@ export async function onRequestGet(context) {
     html = replaceMeta(html, "og:url", canonicalUrl);
     html = replaceMeta(html, "og:type", "article");
     html = replaceMeta(html, "og:site_name", "12 + 12 Noticias de Tigre");
+    html = replaceNameMeta(html, "twitter:card", "summary_large_image");
     html = replaceNameMeta(html, "twitter:title", titulo);
     html = replaceNameMeta(html, "twitter:description", descripcion);
     html = replaceNameMeta(html, "twitter:image", imagen);
@@ -89,7 +93,7 @@ export async function onRequestGet(context) {
       status: 200,
       headers: {
         "Content-Type": "text/html; charset=UTF-8",
-        "Cache-Control": "public, max-age=60"
+        "Cache-Control": "public, max-age=60, s-maxage=60"
       }
     });
   } catch (error) {
