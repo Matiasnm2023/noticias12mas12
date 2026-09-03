@@ -1,0 +1,34 @@
+name: Fix social share URL
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update article share URL
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('noticia.html')
+          s = p.read_text(encoding='utf-8')
+          old = "function urlEstatica(){return new URL('/noticia.html?id='+encodeURIComponent(id),location.origin).href}"
+          new = "function urlEstatica(){return 'https://piyabciajfhlarvecdvu.supabase.co/functions/v1/social-preview?id='+encodeURIComponent(id)}"
+          if old in s:
+              s = s.replace(old, new)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add noticia.html
+          git diff --cached --quiet || git commit -m "fix: use dynamic social preview for article sharing"
+          git push
