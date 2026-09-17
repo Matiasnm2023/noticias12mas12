@@ -1,0 +1,51 @@
+name: Generar previews de Facebook
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7,17,27,37,47,57 * * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  generar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generar paginas de preview
+        env:
+          SUPABASE_URL: https://piyabciajfhlarvecdvu.supabase.co
+          SUPABASE_KEY: sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK
+        run: |
+          git clone "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" repo
+          cd repo
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const base = process.env.SUPABASE_URL;
+          const key = process.env.SUPABASE_KEY;
+          const esc = (v) => String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+          const strip = (v) => String(v ?? '').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim().slice(0,220);
+          async function main(){
+            const url = `${base}/rest/v1/noticias?select=id,titulo,contenido,imagen&order=id.asc`;
+            const r = await fetch(url,{headers:{apikey:key,Authorization:`Bearer ${key}`,Accept:'application/json'}});
+            if(!r.ok) throw new Error(`Supabase HTTP ${r.status}`);
+            const noticias = await r.json();
+            for(const n of noticias){
+              const id = encodeURIComponent(n.id);
+              const titulo = n.titulo || '12 + 12 Noticias de Tigre';
+              const descripcion = strip(n.contenido) || titulo;
+              const imagen = n.imagen || 'https://noticias12mas12.com.ar/logo.jpg';
+              const article = `https://noticias12mas12.com.ar/noticia.html?id=${id}`;
+              const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta property="og:type" content="article"><meta property="og:site_name" content="12 + 12 Noticias de Tigre"><meta property="og:title" content="${esc(titulo)}"><meta property="og:description" content="${esc(descripcion)}"><meta property="og:url" content="${article}"><meta property="og:image" content="${esc(imagen)}"><meta property="og:image:secure_url" content="${esc(imagen)}"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(titulo)}"><meta name="twitter:description" content="${esc(descripcion)}"><meta name="twitter:image" content="${esc(imagen)}"><link rel="canonical" href="${article}"><title>${esc(titulo)} | 12 + 12 Noticias de Tigre</title><meta http-equiv="refresh" content="0;url=${article}"></head><body>Abriendo la noticia...</body></html>`;
+              fs.writeFileSync(path.join(`compartir-${n.id}.html`),html);
+            }
+          }
+          main().catch(e=>{console.error(e);process.exit(1)});
+          NODE
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add compartir-*.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Actualizar previews de Facebook"
+          git push
