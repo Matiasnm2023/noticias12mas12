@@ -1,57 +1,33 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Administración - 12 + 12 Noticias de Tigre</title>
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f1f3f5;color:#222}.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:#111}.login-box{width:100%;max-width:420px;background:#fff;padding:30px;border-radius:12px;box-shadow:0 5px 30px #00000059}.login-box h1{margin-top:0;text-align:center}.login-box p{text-align:center;color:#666}.login-box input{width:100%;padding:13px;margin:8px 0;border:1px solid #ccc;border-radius:6px;font-size:16px}.login-box button{width:100%;padding:13px;margin-top:10px;border:0;border-radius:6px;background:#e30613;color:#fff;font-weight:bold;font-size:16px;cursor:pointer}#mensajeLogin{margin-top:15px;text-align:center;font-weight:bold;min-height:22px}#sitio{display:none}
-</style>
-</head>
-<body>
-<div class="login" id="login"><div class="login-box"><h1>🔐 Administración</h1><p>12 + 12 Noticias de Tigre</p><input type="email" id="email" placeholder="Email" autocomplete="email"><input type="password" id="password" placeholder="Contraseña" autocomplete="current-password"><button type="button" id="btnIngresar">Ingresar</button><div id="mensajeLogin"></div></div></div>
-<div id="sitio"></div>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Administración - 12 + 12 Noticias de Tigre</title>
+<style>body{margin:0;font-family:Arial;background:#111}.login{min-height:100vh;display:flex;align-items:center;justify-content:center}.box{background:#fff;width:min(420px,90%);padding:30px;border-radius:12px}.box h1{text-align:center}.box input,.box button{width:100%;padding:14px;margin:8px 0;box-sizing:border-box;font-size:16px}.box button{background:#e30613;color:#fff;border:0;border-radius:6px;font-weight:bold}.box button:disabled{opacity:.6}#msg{text-align:center;font-weight:bold;min-height:24px}</style></head>
+<body><div class="login"><div class="box"><h1>🔐 Administración</h1><p style="text-align:center">12 + 12 Noticias de Tigre</p><input id="email" type="email" placeholder="Email"><input id="password" type="password" placeholder="Contraseña"><button id="btn" type="button">INGRESAR</button><div id="msg">Página cargada correctamente.</div></div></div>
 <script>
-const SUPABASE_URL="https://piyabciajfhlarvecdvu.supabase.co";
-const SUPABASE_KEY="sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK";
-const mensaje=document.getElementById("mensajeLogin");
-const btn=document.getElementById("btnIngresar");
-
-async function iniciarSesion(){
- const email=document.getElementById("email").value.trim();
- const password=document.getElementById("password").value;
- if(!email||!password){mensaje.innerText="Ingresá email y contraseña.";return}
- btn.disabled=true;btn.innerText="Ingresando...";mensaje.innerText="Conectando...";
- try{
-  const r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{
-   method:"POST",
-   headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},
-   body:JSON.stringify({email,password})
-  });
-  const raw=await r.text();
-  let data={};try{data=JSON.parse(raw)}catch(_){}
-  if(!r.ok){
-   mensaje.innerText="❌ "+(data.error_description||data.msg||data.message||("Error HTTP "+r.status));
-   return;
+(function(){
+"use strict";
+var btn=document.getElementById("btn"),msg=document.getElementById("msg"),email=document.getElementById("email"),password=document.getElementById("password");
+function setMsg(t){msg.textContent=t}
+btn.onclick=function(){
+ setMsg("BOTÓN FUNCIONANDO — conectando...");
+ btn.disabled=true;
+ var xhr=new XMLHttpRequest();
+ xhr.open("POST","https://piyabciajfhlarvecdvu.supabase.co/auth/v1/token?grant_type=password",true);
+ xhr.setRequestHeader("apikey","sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK");
+ xhr.setRequestHeader("Content-Type","application/json");
+ xhr.onreadystatechange=function(){
+  if(xhr.readyState!==4)return;
+  btn.disabled=false;
+  if(xhr.status>=200&&xhr.status<300){
+   setMsg("✅ ACCESO CORRECTO. La autenticación funciona.");
+   try{localStorage.setItem("sb-session",xhr.responseText)}catch(e){}
+  }else{
+   var d={};try{d=JSON.parse(xhr.responseText)}catch(e){}
+   setMsg("❌ "+(d.error_description||d.msg||d.message||("Error HTTP "+xhr.status)));
   }
-  if(!data.access_token){
-   mensaje.innerText="❌ Supabase no devolvió una sesión.";
-   return;
-  }
-  localStorage.setItem("sb-session",JSON.stringify(data));
-  mensaje.innerText="✅ Acceso correcto. Cargando...";
-  document.getElementById("login").style.display="none";
-  document.getElementById("sitio").style.display="block";
- }catch(e){
-  mensaje.innerText="❌ Error de conexión: "+(e.message||"No se pudo conectar.");
- }finally{
-  btn.disabled=false;btn.innerText="Ingresar";
- }
-}
-btn.addEventListener("click",iniciarSesion);
-document.getElementById("password").addEventListener("keydown",e=>{if(e.key==="Enter")iniciarSesion()});
-document.getElementById("email").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("password").focus()});
-mensaje.innerText="Sistema de acceso listo.";
-</script>
-</body>
-</html>
+ };
+ xhr.onerror=function(){btn.disabled=false;setMsg("❌ El navegador bloqueó la conexión con Supabase.")};
+ try{xhr.send(JSON.stringify({email:email.value.trim(),password:password.value}))}catch(e){btn.disabled=false;setMsg("❌ "+e.message)}
+};
+password.onkeydown=function(e){if(e.key==="Enter")btn.click()};
+})();
+</script></body></html>
