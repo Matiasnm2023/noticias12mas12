@@ -75,7 +75,7 @@ jobs:
           NODE
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add compartir-*.html
+          git add compartir-*.html previews/
           git diff --cached --quiet && exit 0
           git commit -m "Fix previews de Facebook sin redireccion meta"
           git push
