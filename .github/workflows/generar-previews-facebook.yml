@@ -12,13 +12,14 @@ jobs:
   generar:
     runs-on: ubuntu-latest
     steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
       - name: Generar paginas de preview
         env:
           SUPABASE_URL: https://piyabciajfhlarvecdvu.supabase.co
           SUPABASE_KEY: sb_publishable_t2UOYQYMPxYW1g5R4HoVaw_erREYkWK
         run: |
-          git clone "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" repo
-          cd repo
           node <<'NODE'
           const fs = require('fs');
           const path = require('path');
