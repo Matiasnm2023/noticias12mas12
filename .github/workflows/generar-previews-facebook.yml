@@ -18,6 +18,11 @@ jobs:
       - name: Descargar repositorio
         uses: actions/checkout@v4
 
+      - name: Instalar optimizador de imágenes
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
+
       - name: Generar paginas de preview
         env:
           SUPABASE_URL: https://piyabciajfhlarvecdvu.supabase.co
@@ -26,6 +31,7 @@ jobs:
           node <<'NODE'
           const fs = require('fs');
           const path = require('path');
+          const { execFileSync } = require('child_process');
           const base = process.env.SUPABASE_URL;
           const previewDir = path.join(process.cwd(), 'previews');
           fs.mkdirSync(previewDir, { recursive: true });
@@ -54,10 +60,16 @@ jobs:
                     if (ext && (!declaredSize || declaredSize <= 5 * 1024 * 1024)) {
                       const buffer = Buffer.from(await imgResponse.arrayBuffer());
                       if (buffer.length > 0 && buffer.length <= 5 * 1024 * 1024) {
-                        const localName = `noticia-${n.id}.${ext}`;
-                        fs.writeFileSync(path.join(previewDir, localName), buffer);
+                        const sourceName = `noticia-${n.id}-original.${ext}`;
+                        const sourcePath = path.join(previewDir, sourceName);
+                        const localName = `noticia-${n.id}.jpg`;
+                        const outputPath = path.join(previewDir, localName);
+                        fs.writeFileSync(sourcePath, buffer);
+                        execFileSync('convert', [sourcePath, '-auto-orient', '-thumbnail', '1200x1200>', '-strip', '-quality', '82', outputPath]);
+                        const optimized = fs.statSync(outputPath);
+                        if (optimized.size > 900 * 1024) throw new Error(`Imagen optimizada demasiado pesada: ${optimized.size} bytes`);
                         imagen = `https://noticias12mas12.com.ar/previews/${localName}`;
-                        imageType = contentType;
+                        imageType = 'image/jpeg';
                       }
                     }
                   }
