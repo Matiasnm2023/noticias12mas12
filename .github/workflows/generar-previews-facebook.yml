@@ -1,3 +1,4 @@
+
 name: Generar previews de Facebook
 
 on:
@@ -32,62 +33,173 @@ jobs:
           const fs = require('fs');
           const path = require('path');
           const { execFileSync } = require('child_process');
+
           const base = process.env.SUPABASE_URL;
           const previewDir = path.join(process.cwd(), 'previews');
+
           fs.mkdirSync(previewDir, { recursive: true });
+
           const key = process.env.SUPABASE_KEY;
-          const esc = (v) => String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-          const strip = (v) => String(v ?? '').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim().slice(0,220);
-          async function main(){
+
+          const esc = (v) => String(v ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+
+          const strip = (v) => String(v ?? '')
+            .replace(/<[^>]*>/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .slice(0, 220);
+
+          async function main() {
             const url = `${base}/rest/v1/noticias?select=id,titulo,contenido,imagen&order=id.asc`;
-            const r = await fetch(url,{headers:{apikey:key,Authorization:`Bearer ${key}`,Accept:'application/json'}});
-            if(!r.ok) throw new Error(`Supabase HTTP ${r.status}`);
+
+            const r = await fetch(url, {
+              headers: {
+                apikey: key,
+                Authorization: `Bearer ${key}`,
+                Accept: 'application/json'
+              }
+            });
+
+            if (!r.ok) throw new Error(`Supabase HTTP ${r.status}`);
+
             const noticias = await r.json();
-            for(const n of noticias){
+
+            for (const n of noticias) {
               const id = encodeURIComponent(n.id);
               const titulo = n.titulo || '12 + 12 Noticias de Tigre';
               const descripcion = strip(n.contenido) || titulo;
+
               let imagen = 'https://noticias12mas12.com.ar/logo.jpg';
               let imageType = 'image/jpeg';
+
               if (n.imagen) {
                 try {
                   const imgResponse = await fetch(n.imagen);
+
                   if (imgResponse.ok) {
-                    const contentType = (imgResponse.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
-                    const extensions = {'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif'};
+                    const contentType = (imgResponse.headers.get('content-type') || '')
+                      .split(';')[0].trim().toLowerCase();
+
+                    const extensions = {
+                      'image/jpeg': 'jpg',
+                      'image/png': 'png',
+                      'image/webp': 'webp',
+                      'image/gif': 'gif'
+                    };
+
                     const ext = extensions[contentType];
-                    const declaredSize = Number(imgResponse.headers.get('content-length') || 0);
+                    const declaredSize = Number(
+                      imgResponse.headers.get('content-length') || 0
+                    );
+
                     if (ext && (!declaredSize || declaredSize <= 5 * 1024 * 1024)) {
                       const buffer = Buffer.from(await imgResponse.arrayBuffer());
+
                       if (buffer.length > 0 && buffer.length <= 5 * 1024 * 1024) {
                         const sourceName = `noticia-${n.id}-original.${ext}`;
                         const sourcePath = path.join(previewDir, sourceName);
                         const localName = `noticia-${n.id}.jpg`;
                         const outputPath = path.join(previewDir, localName);
+
                         fs.writeFileSync(sourcePath, buffer);
-                        execFileSync('convert', [sourcePath, '-auto-orient', '-thumbnail', '1200x1200>', '-strip', '-quality', '82', outputPath]);
+
+                        execFileSync('convert', [
+                          sourcePath,
+                          '-auto-orient',
+                          '-thumbnail',
+                          '1200x1200>',
+                          '-strip',
+                          '-quality',
+                          '82',
+                          outputPath
+                        ]);
+
                         const optimized = fs.statSync(outputPath);
-                        if (optimized.size > 900 * 1024) throw new Error(`Imagen optimizada demasiado pesada: ${optimized.size} bytes`);
+
+                        if (optimized.size > 900 * 1024) {
+                          throw new Error(
+                            `Imagen optimizada demasiado pesada: ${optimized.size} bytes`
+                          );
+                        }
+
                         imagen = `https://noticias12mas12.com.ar/previews/${localName}`;
                         imageType = 'image/jpeg';
                       }
                     }
                   }
                 } catch (e) {
-                  console.warn(`No se pudo copiar la imagen de la noticia ${n.id}: ${e.message}`);
+                  console.warn(
+                    `No se pudo copiar la imagen de la noticia ${n.id}: ${e.message}`
+                  );
                 }
               }
+
               const article = `https://noticias12mas12.com.ar/noticia.html?id=${id}`;
               const preview = `https://noticias12mas12.com.ar/compartir-${id}.html`;
-              const html = `<!doctype html><html lang="es"><head><script>window.location.replace("${article}");</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta property="og:type" content="article"><meta property="og:site_name" content="12 + 12 Noticias de Tigre"><meta property="og:title" content="${esc(titulo)}"><meta property="og:description" content="${esc(descripcion)}"><meta property="og:url" content="${preview}"><meta property="og:image" content="${esc(imagen)}"><meta property="og:image:secure_url" content="${esc(imagen)}"><meta property="og:image:type" content="${imageType}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(titulo)}"><meta name="twitter:description" content="${esc(descripcion)}"><meta name="twitter:image" content="${esc(imagen)}"><link rel="canonical" href="${article}"><title>${esc(titulo)} | 12 + 12 Noticias de Tigre</title></head><body><main style="max-width:900px;margin:30px auto;padding:20px;font-family:Arial,sans-serif;text-align:center"><h1>${esc(titulo)}</h1><p>${esc(descripcion)}</p><img src="${esc(imagen)}" alt="${esc(titulo)}" style="max-width:100%;height:auto"><p><a href="${article}">Leer la noticia completa</a></p></main></body></html>`;
-              fs.writeFileSync(path.join(`compartir-${n.id}.html`),html);
+
+              const html = `<!doctype html>
+          <html lang="es">
+          <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width,initial-scale=1">
+
+          <meta property="og:type" content="article">
+          <meta property="og:site_name" content="12 + 12 Noticias de Tigre">
+          <meta property="og:title" content="${esc(titulo)}">
+          <meta property="og:description" content="${esc(descripcion)}">
+          <meta property="og:url" content="${preview}">
+          <meta property="og:image" content="${esc(imagen)}">
+          <meta property="og:image:secure_url" content="${esc(imagen)}">
+          <meta property="og:image:type" content="${imageType}">
+          <meta property="og:image:width" content="1200">
+          <meta property="og:image:height" content="1200">
+
+          <meta name="twitter:card" content="summary_large_image">
+          <meta name="twitter:title" content="${esc(titulo)}">
+          <meta name="twitter:description" content="${esc(descripcion)}">
+          <meta name="twitter:image" content="${esc(imagen)}">
+
+          <link rel="canonical" href="${article}">
+          <title>${esc(titulo)} | 12 + 12 Noticias de Tigre</title>
+          </head>
+
+          <body>
+          <main style="max-width:900px;margin:30px auto;padding:20px;font-family:Arial,sans-serif;text-align:center">
+          <h1>${esc(titulo)}</h1>
+          <p>${esc(descripcion)}</p>
+          <img src="${esc(imagen)}" alt="${esc(titulo)}" style="max-width:100%;height:auto">
+          <p><a href="${article}">Leer la noticia completa</a></p>
+          </main>
+
+          <script>
+          window.location.replace("${article}");
+          </script>
+
+          </body>
+          </html>`;
+
+              fs.writeFileSync(
+                path.join(process.cwd(), `compartir-${n.id}.html`),
+                html
+              );
             }
           }
-          main().catch(e=>{console.error(e);process.exit(1)});
+
+          main().catch(e => {
+            console.error(e);
+            process.exit(1);
+          });
           NODE
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add compartir-*.html previews/
           git diff --cached --quiet && exit 0
-          git commit -m "Fix previews de Facebook sin redireccion meta"
+
+          git commit -m "Fix WhatsApp preview metadata before redirect"
           git push
