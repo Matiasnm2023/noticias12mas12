@@ -139,7 +139,7 @@ jobs:
               }
 
               const article = `https://noticias12mas12.com.ar/noticia.html?id=${id}`;
-              const preview = `https://noticias12mas12.com.ar/compartir-${id}.html`;
+              const preview = `https://noticias12mas12.com.ar/compartir-${id}.html?v=6`; // Enlace fijo para WhatsApp: evita reutilizar previews en caché.
 
               const html = `<!doctype html>
           <html lang="es">
