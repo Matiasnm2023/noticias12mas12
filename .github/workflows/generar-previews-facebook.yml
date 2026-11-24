@@ -202,4 +202,5 @@ jobs:
           git diff --cached --quiet && exit 0
 
           git commit -m "Fix WhatsApp preview metadata before redirect"
+          git pull --rebase origin main
           git push
