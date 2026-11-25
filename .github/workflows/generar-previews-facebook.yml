@@ -6,14 +6,13 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    - cron: '7,17,27,37,47,57 * * * *'
+    - cron: '*/5 * * * *'
 
 permissions:
   contents: write
 
 jobs:
   generar:
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Descargar repositorio
