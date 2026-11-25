@@ -15,7 +15,9 @@ Para cada noticia con ID `ID`:
 
 5. No reemplazarlo por `noticia.html?id=ID`, `noticias/ID.html` ni variantes sin el parámetro `?v=6`.
 6. Antes de entregar el enlace, verificar que existan el archivo HTML y la imagen de preview en el repositorio y que GitHub Pages haya publicado los cambios.
-7. La finalización del workflow no garantiza por sí sola que WhatsApp haya actualizado la tarjeta. La vista previa se considera confirmada únicamente cuando se comprueba en WhatsApp.
+7. El generador debe ejecutarse cada 5 minutos y ante cada push al repositorio; no debe excluir ejecuciones según el usuario que las inicia.
+8. La imagen es obligatoria. Si falta, no se puede descargar o no se puede optimizar, el workflow debe fallar e informar el ID; nunca debe usar silenciosamente el logo del sitio como reemplazo.
+9. La finalización del workflow no garantiza por sí sola que WhatsApp haya actualizado la tarjeta. La vista previa se considera confirmada únicamente cuando se comprueba en WhatsApp.
 
 ## Automatización
 
