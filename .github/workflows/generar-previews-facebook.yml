@@ -72,7 +72,8 @@ jobs:
               const titulo = n.titulo || '12 + 12 Noticias de Tigre';
               const descripcion = strip(n.contenido) || titulo;
 
-              let imagen = 'https://noticias12mas12.com.ar/logo.jpg';
+              let imagen = null;
+              if (!n.imagen) throw new Error('La noticia ' + n.id + ' no tiene imagen cargada.');
               let imageType = 'image/jpeg';
 
               if (n.imagen) {
@@ -131,9 +132,7 @@ jobs:
                     }
                   }
                 } catch (e) {
-                  console.warn(
-                    `No se pudo copiar la imagen de la noticia ${n.id}: ${e.message}`
-                  );
+                  throw new Error('No se pudo generar la imagen previa de la noticia ' + n.id + ': ' + e.message);
                 }
               }
 
